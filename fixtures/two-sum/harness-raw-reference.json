@@ -1,0 +1,141 @@
+{
+  "status": "ok",
+  "tests": [
+    {
+      "id": "basic-1",
+      "group": "basic",
+      "passed": true,
+      "actual": [
+        0,
+        1
+      ],
+      "error": null,
+      "timeMs": 0.008
+    },
+    {
+      "id": "basic-2",
+      "group": "basic",
+      "passed": true,
+      "actual": [
+        3,
+        4
+      ],
+      "error": null,
+      "timeMs": 0.004
+    },
+    {
+      "id": "basic-3",
+      "group": "basic",
+      "passed": true,
+      "actual": [
+        3,
+        4
+      ],
+      "error": null,
+      "timeMs": 0.003
+    },
+    {
+      "id": "basic-4",
+      "group": "basic",
+      "passed": true,
+      "actual": [
+        0,
+        1
+      ],
+      "error": null,
+      "timeMs": 0.002
+    },
+    {
+      "id": "edge-same-value-twice",
+      "group": "edge",
+      "passed": true,
+      "actual": [
+        0,
+        1
+      ],
+      "error": null,
+      "timeMs": 0.002
+    },
+    {
+      "id": "edge-half-target-once",
+      "group": "edge",
+      "passed": true,
+      "actual": [
+        1,
+        2
+      ],
+      "error": null,
+      "timeMs": 0.002
+    },
+    {
+      "id": "edge-negatives",
+      "group": "edge",
+      "passed": true,
+      "actual": [
+        0,
+        2
+      ],
+      "error": null,
+      "timeMs": 0.002
+    },
+    {
+      "id": "edge-zeros",
+      "group": "edge",
+      "passed": true,
+      "actual": [
+        0,
+        3
+      ],
+      "error": null,
+      "timeMs": 0.002
+    },
+    {
+      "id": "edge-pair-at-end",
+      "group": "edge",
+      "passed": true,
+      "actual": [
+        8,
+        9
+      ],
+      "error": null,
+      "timeMs": 0.002
+    },
+    {
+      "id": "edge-large-values",
+      "group": "edge",
+      "passed": true,
+      "actual": [
+        0,
+        1
+      ],
+      "error": null,
+      "timeMs": 0.002
+    }
+  ],
+  "timings": [
+    {
+      "n": 100,
+      "status": "ok",
+      "timeMs": 0.01,
+      "digest": "bcb8b36245fae5a6"
+    },
+    {
+      "n": 1000,
+      "status": "ok",
+      "timeMs": 0.1,
+      "digest": "76c4b5bc62dbcee9"
+    },
+    {
+      "n": 10000,
+      "status": "ok",
+      "timeMs": 0.883,
+      "digest": "63599a6b9a21ba80"
+    },
+    {
+      "n": 100000,
+      "status": "ok",
+      "timeMs": 17.943,
+      "digest": "482f5d1c80330f9e"
+    }
+  ]
+}

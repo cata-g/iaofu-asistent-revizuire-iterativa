@@ -117,10 +117,10 @@ Inputul mare se generează în sandbox, cu `generate(n, random.Random(seed + n))
 
 | Câmp | Valori |
 |---|---|
-| `status` | `ok`, sau `compile_error` (eroare de sintaxă, funcție lipsă), caz în care `error` conține mesajul și `tests` e gol |
+| `status` | `ok`; `compile_error` (eroare de sintaxă, funcție lipsă); `error` (procesul a fost oprit de Piston înainte să raporteze, de exemplu la depășirea memoriei). La `compile_error` și `error`, mesajul e în `error`, iar `tests` e gol |
 | `tests[].group` | `basic`, `edge`, `large` (`large-<n>` per dimensiune) |
 | `tests[]` trecut | doar `id`, `group`, `passed`, `timeMs` |
-| `tests[]` picat | în plus `input`, `expected`, `actual`, `error` (F5). La `large`, `input` e o descriere și lipsește `expected` |
+| `tests[]` picat | în plus `input`, `expected`, `actual`, `error` (F5); câmpurile `null` lipsesc din JSON. La `large`, `input` e o descriere și lipsește `expected` |
 | `error` | `"timeout"` sau `"line 4: IndexError: list index out of range"` (linia din `solution.py`) |
 | `timings[].status` | `ok`, `timeout`, `error`, `wrong` (răspuns greșit pe inputul mare), `skipped` |
 | `slope` | panta regresiei pe scară log-log (log₁₀ timp față de log₁₀ n), calculată pe punctele `ok` sau `wrong`; `null` dacă sunt mai puțin de două |

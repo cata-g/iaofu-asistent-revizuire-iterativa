@@ -1,8 +1,14 @@
-:root {
-  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
-  color-scheme: light dark;
-}
-
 body {
   margin: 0;
+}
+
+/* Lines that an observation points at */
+.observation-line {
+  background: rgba(237, 108, 2, 0.15);
+}
+
+.observation-glyph {
+  background: #ed6c02;
+  width: 4px !important;
+  margin-left: 6px;
 }
