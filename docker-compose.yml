@@ -35,5 +35,47 @@ services:
             -d '{"language":"python","version":"3.12.0"}'
         fi
 
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: reviewer
+      POSTGRES_USER: reviewer
+      POSTGRES_PASSWORD: reviewer
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U reviewer -d reviewer"]
+      interval: 2s
+      retries: 30
+
+  backend:
+    build: ./backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+      piston-init:
+        condition: service_completed_successfully
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/reviewer
+      DB_USER: reviewer
+      DB_PASSWORD: reviewer
+      PISTON_URL: http://piston:2000
+      PROBLEMS_DIR: /problems
+    volumes:
+      - ./problems:/problems:ro
+    ports:
+      - "127.0.0.1:8080:8080"
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      - backend
+    ports:
+      - "127.0.0.1:5173:80"
+
 volumes:
   piston-packages:
+  postgres-data:
