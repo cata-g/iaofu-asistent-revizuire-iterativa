@@ -1,0 +1,47 @@
+{
+  "problemId": "valid-parentheses",
+  "versions": [
+    {
+      "version": 1,
+      "file": "v1.py",
+      "description": "Numără parantezele deschise și închise, dar ignoră tipul lor.",
+      "expectedFailures": ["basic-wrong-type", "basic-crossed"],
+      "referenceObservations": [
+        {
+          "type": "correctness",
+          "lines": [3, 4, 5, 6],
+          "severity": "high",
+          "description": "Un singur contor nu distinge tipurile de paranteze și nici ordinea închiderii: \"(]\" și \"([)]\" sunt acceptate."
+        }
+      ]
+    },
+    {
+      "version": 2,
+      "file": "v2.py",
+      "description": "Elimină repetat perechile vecine cu replace; corect, dar pătratic pe paranteze imbricate adânc.",
+      "expectedFailures": ["large-100000"],
+      "referenceObservations": [
+        {
+          "type": "efficiency",
+          "lines": [2, 3],
+          "severity": "medium",
+          "description": "Fiecare trecere elimină un singur nivel de imbricare și parcurge tot șirul, deci O(n²) pe inputuri adânci."
+        }
+      ]
+    },
+    {
+      "version": 3,
+      "file": "v3.py",
+      "description": "Stivă corectă, dar la final returnează True fără să verifice dacă au rămas paranteze deschise.",
+      "expectedFailures": ["edge-single-open", "edge-only-opens", "edge-unclosed-at-end"],
+      "referenceObservations": [
+        {
+          "type": "edge_case",
+          "lines": [10],
+          "severity": "medium",
+          "description": "Parantezele rămase deschise la final nu sunt verificate: \"(\" este acceptat."
+        }
+      ]
+    }
+  ]
+}

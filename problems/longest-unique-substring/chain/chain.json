@@ -1,0 +1,47 @@
+{
+  "problemId": "longest-unique-substring",
+  "versions": [
+    {
+      "version": 1,
+      "file": "v1.py",
+      "description": "Forță brută: din fiecare poziție extinde cu o mulțime până la prima repetiție. Corect, dar O(n²).",
+      "expectedFailures": ["large-10000", "large-100000"],
+      "referenceObservations": [
+        {
+          "type": "efficiency",
+          "lines": [3, 5],
+          "severity": "medium",
+          "description": "Pentru fiecare început se reconstruiește tot subșirul, deci O(n²) când subșirurile fără repetiții sunt lungi."
+        }
+      ]
+    },
+    {
+      "version": 2,
+      "file": "v2.py",
+      "description": "Fereastră glisantă, dar începutul poate sări înapoi când caracterul repetat e înaintea ferestrei curente.",
+      "expectedFailures": ["edge-abba", "edge-left-jump", "large-10000", "large-100000"],
+      "referenceObservations": [
+        {
+          "type": "edge_case",
+          "lines": [6, 7],
+          "severity": "high",
+          "description": "Lipsește condiția ca ultima apariție să fie în fereastra curentă: pe \"abba\" începutul se mută înapoi și răspunsul e 3 în loc de 2."
+        }
+      ]
+    },
+    {
+      "version": 3,
+      "file": "v3.py",
+      "description": "Actualizează maximul doar când găsește o repetiție, deci ratează fereastra de la final.",
+      "expectedFailures": ["basic-dvdf", "edge-space", "edge-all-unique", "edge-left-jump", "edge-best-at-end", "large-10000"],
+      "referenceObservations": [
+        {
+          "type": "correctness",
+          "lines": [7, 10],
+          "severity": "high",
+          "description": "Maximul nu se actualizează pentru fereastra care se termină la sfârșitul șirului: \"abcdef\" dă 0."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "problemId": "merge-intervals",
+  "versions": [
+    {
+      "version": 1,
+      "file": "v1.py",
+      "description": "Unește intervalele vecine în ordinea primită, fără să le ordoneze întâi.",
+      "expectedFailures": ["basic-unsorted", "edge-point", "large-100", "large-1000", "large-10000", "large-100000"],
+      "referenceObservations": [
+        {
+          "type": "correctness",
+          "lines": [3],
+          "severity": "high",
+          "description": "Fără ordonare după început, intervalele care se suprapun dar nu sunt vecine în listă nu se unesc."
+        }
+      ]
+    },
+    {
+      "version": 2,
+      "file": "v2.py",
+      "description": "Ordonează, dar folosește < în loc de <=, deci intervalele care doar se ating rămân separate.",
+      "expectedFailures": ["edge-touching", "edge-point", "large-100", "large-1000", "large-10000", "large-100000"],
+      "referenceObservations": [
+        {
+          "type": "edge_case",
+          "lines": [5],
+          "severity": "medium",
+          "description": "Condiția strictă nu unește [1, 4] și [4, 5]."
+        }
+      ]
+    },
+    {
+      "version": 3,
+      "file": "v3.py",
+      "description": "Condiția e corectă, dar capătul devine capătul intervalului curent, chiar dacă e mai mic.",
+      "expectedFailures": ["edge-contained", "large-100", "large-1000", "large-10000", "large-100000"],
+      "referenceObservations": [
+        {
+          "type": "edge_case",
+          "lines": [6],
+          "severity": "high",
+          "description": "Un interval conținut în altul scurtează rezultatul: [[1, 10], [2, 3]] dă [[1, 3]]."
+        }
+      ]
+    }
+  ]
+}

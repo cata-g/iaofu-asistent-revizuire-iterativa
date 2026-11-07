@@ -1,11 +1,13 @@
 """Checks a problem directory against the contract by running it through Piston.
 
 Usage:
-    python scripts/check_problem.py problems/two-sum              # check the problem
+    python scripts/check_problem.py problems/two-sum              # check the problem and its chain
     python scripts/check_problem.py problems/two-sum --run v1.py  # run a solution, print the raw harness result
+    python scripts/check_problem.py problems/two-sum --failures v1.py  # list the tests a solution fails
 
-Checks: required fields, the reference passes every test, every test input is
-valid for inputs.is_valid, and the generator produces valid inputs for each n.
+Checks: required fields, the reference passes every test and finishes every n,
+every test input and example is valid for inputs.is_valid, and every version in
+chain/chain.json fails exactly its expectedFailures.
 Needs Piston running (docker compose up piston piston-init). Stdlib only.
 """
 import argparse
@@ -52,6 +54,38 @@ def evaluate_job(problem):
             "large": {**problem["large"], "timeLimitMs": problem["timeLimitMs"], "repeats": 3}}
 
 
+def failures(problem_dir, problem, code, reference):
+    """Test ids a solution fails, including large-<n> (timeout, error or a digest that differs)."""
+    result = run(problem_dir, code, evaluate_job(problem))
+    if result["status"] != "ok":
+        return ["compile_error"]
+    ref_digest = {t["n"]: t["digest"] for t in reference["timings"]}
+    failed = [t["id"] for t in result["tests"] if not t["passed"]]
+    failed += [f"large-{t['n']}" for t in result["timings"]
+               if t["status"] != "ok" or t["digest"] != ref_digest[t["n"]]]
+    return failed
+
+
+def check_chain(problem_dir, problem, reference):
+    path = os.path.join(problem_dir, "chain", "chain.json")
+    if not os.path.exists(path):
+        return ["missing chain/chain.json"]
+    chain = json.loads(read(path))
+    errors = []
+    for v in chain["versions"]:
+        code = read(os.path.join(problem_dir, "chain", v["file"]))
+        actual = failures(problem_dir, problem, code, reference)
+        expected = v["expectedFailures"]
+        status = "ok" if sorted(actual) == sorted(expected) else "MISMATCH"
+        print(f"  chain v{v['version']}: fails {actual} [{status}]")
+        if status != "ok":
+            errors.append(f"chain v{v['version']} fails {sorted(actual)}, expected {sorted(expected)}")
+        for o in v["referenceObservations"]:
+            if o["type"] not in ("correctness", "edge_case", "efficiency") or o["severity"] not in ("high", "medium", "low"):
+                errors.append(f"chain v{v['version']}: bad reference observation {o}")
+    return errors
+
+
 def check(problem_dir):
     problem = json.loads(read(os.path.join(problem_dir, "problem.json")))
     errors = [f"missing field: {f}" for f in REQUIRED if f not in problem]
@@ -83,14 +117,20 @@ def check(problem_dir):
         valid = run(problem_dir, "", {"mode": "validate", "input": ex["input"]})
         if not valid["valid"]:
             errors.append(f"example {ex['input']} is not valid for inputs.is_valid")
-    return errors
+    return errors + check_chain(problem_dir, problem, result)
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("problem_dir")
     parser.add_argument("--run", help="solution file to run instead of checking the problem")
+    parser.add_argument("--failures", help="solution file whose failing tests to list")
     args = parser.parse_args()
+    if args.failures:
+        problem = json.loads(read(os.path.join(args.problem_dir, "problem.json")))
+        reference = run(args.problem_dir, read(os.path.join(args.problem_dir, "reference.py")), evaluate_job(problem))
+        print(failures(args.problem_dir, problem, read(args.failures), reference))
+        return
     if args.run:
         problem = json.loads(read(os.path.join(args.problem_dir, "problem.json")))
         print(json.dumps(run(args.problem_dir, read(args.run), evaluate_job(problem)), indent=2, ensure_ascii=False))

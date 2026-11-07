@@ -1,0 +1,47 @@
+{
+  "problemId": "first-position",
+  "versions": [
+    {
+      "version": 1,
+      "file": "v1.py",
+      "description": "Parcurge liniar vectorul pentru fiecare interogare. Corect, dar O(n·q).",
+      "expectedFailures": ["large-10000", "large-100000"],
+      "referenceObservations": [
+        {
+          "type": "efficiency",
+          "lines": [5],
+          "severity": "medium",
+          "description": "Fiecare interogare parcurge tot vectorul, fără să folosească faptul că e ordonat."
+        }
+      ]
+    },
+    {
+      "version": 2,
+      "file": "v2.py",
+      "description": "Căutare binară clasică: se oprește la prima potrivire găsită, nu la prima apariție.",
+      "expectedFailures": ["basic-example", "basic-repeats", "edge-all-same", "large-100", "large-1000", "large-10000", "large-100000"],
+      "referenceObservations": [
+        {
+          "type": "correctness",
+          "lines": [8, 9, 10],
+          "severity": "high",
+          "description": "Cu valori repetate, oprirea la prima potrivire dă o apariție oarecare, nu prima: [5, 5, 5, ...] dă indicele din mijloc."
+        }
+      ]
+    },
+    {
+      "version": 3,
+      "file": "v3.py",
+      "description": "Găsește corect poziția de inserare, dar nu verifică dacă valoarea există acolo.",
+      "expectedFailures": ["basic-example", "edge-below-all", "edge-above-all", "edge-gap", "edge-single", "large-100", "large-1000", "large-10000", "large-100000"],
+      "referenceObservations": [
+        {
+          "type": "edge_case",
+          "lines": [11],
+          "severity": "high",
+          "description": "Pentru o valoare care lipsește se returnează poziția de inserare în loc de -1, inclusiv len(nums) când e mai mare decât toate."
+        }
+      ]
+    }
+  ]
+}

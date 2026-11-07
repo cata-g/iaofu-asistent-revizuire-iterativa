@@ -44,9 +44,13 @@ class ApiIntegrationTest {
         mvc.perform(get("/api/problems").param("category", "hashing"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value("two-sum"));
-        mvc.perform(get("/api/problems").param("difficulty", "medium"))
+        mvc.perform(get("/api/problems").param("difficulty", "medium").param("category", "stack"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(0));
+        String medium = mvc.perform(get("/api/problems").param("difficulty", "medium"))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        assertThat(body(medium).valueStream()).isNotEmpty()
+                .allMatch(p -> p.get("difficulty").asString().equals("medium"));
 
         String detail = mvc.perform(get("/api/problems/two-sum")).andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();

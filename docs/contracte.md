@@ -66,6 +66,36 @@ Floats se compară rotunjite la 6 zecimale, iar mulțimile (`set`) ca liste sort
 
 Exemplul complet: [`problems/two-sum/`](../problems/two-sum).
 
+### 1.2 Lanțurile de versiuni și împărțirea seturilor
+
+Pentru evaluarea automată (PRD 7.2), fiecare problemă are în `problems/<id>/chain/` 2-4 versiuni intenționat imperfecte (`v1.py`, `v2.py`, …) și un `chain.json`. Lanțurile nu ajung niciodată la frontend.
+
+```json
+{
+  "problemId": "two-sum",
+  "versions": [
+    {
+      "version": 2,
+      "file": "v2.py",
+      "description": "Dicționar, dar adaugă elementul înainte să caute complementul.",
+      "expectedFailures": ["edge-same-value-twice", "edge-half-target-once", "edge-zeros"],
+      "referenceObservations": [
+        { "type": "edge_case", "lines": [4, 5], "severity": "high", "description": "…" }
+      ]
+    }
+  ]
+}
+```
+
+| Câmp | Descriere |
+|---|---|
+| `expectedFailures` | exact testele pe care le pică versiunea, inclusiv `large-<n>`; `check_problem.py` verifică potrivirea |
+| `referenceObservations[].type` | `correctness`, `edge_case`, `efficiency` |
+| `referenceObservations[].lines` | liniile unde e cauza; o observație a sistemului se potrivește dacă are același tip și o linie din listă (±1) |
+| `referenceObservations[].severity` | `high` (răspuns greșit pe cazuri obișnuite), `medium` (caz limită sau prea lent), `low` (rar sau minor) |
+
+`problems/split.json` fixează împărțirea: `tuning` (reglarea promptului) și `test` (neatins până la evaluarea finală).
+
 ## 2. Execuția și rezultatele testelor
 
 ### 2.1 Cum rulează codul

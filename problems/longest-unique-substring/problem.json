@@ -1,0 +1,48 @@
+{
+  "id": "longest-unique-substring",
+  "title": "Cel mai lung subșir fără repetiții",
+  "category": "two-pointers",
+  "difficulty": "medium",
+  "statement": "Se dă un șir `s`. Returnează lungimea celui mai lung subșir de caractere **consecutive** în care niciun caracter nu se repetă.",
+  "examples": [
+    { "input": { "s": "abcabcbb" }, "output": 3, "explanation": "Răspunsul este \"abc\", de lungime 3." },
+    { "input": { "s": "pwwkew" }, "output": 3, "explanation": "Răspunsul este \"wke\". \"pwke\" nu contează, pentru că nu e format din caractere consecutive." }
+  ],
+  "signature": {
+    "function": "longest_unique",
+    "params": [{ "name": "s", "type": "str" }],
+    "returns": "int"
+  },
+  "constraints": [
+    "0 ≤ len(s) ≤ 10⁵",
+    "s poate conține orice caractere Unicode"
+  ],
+  "timeLimitMs": 1000,
+  "comparator": "exact",
+  "forbiddenTerms": [
+    { "term": "fereastră", "allowedIfCode": "left|start|lo\\b|i\\s*=\\s*max" },
+    { "term": "fereastra", "allowedIfCode": "left|start|lo\\b|i\\s*=\\s*max" },
+    { "term": "sliding" },
+    { "term": "window" },
+    { "term": "doi pointeri" },
+    { "term": "two pointers" },
+    { "term": "dicționar", "allowedIfCode": "\\{\\s*\\}|dict\\(" },
+    { "term": "dictionar", "allowedIfCode": "\\{\\s*\\}|dict\\(" },
+    { "term": "hash" },
+    { "term": "ultima poziție", "allowedIfCode": "last|seen\\[" },
+    { "term": "ultima apariție", "allowedIfCode": "last|seen\\[" }
+  ],
+  "tests": [
+    { "id": "basic-abc", "group": "basic", "input": { "s": "abcabcbb" }, "expected": 3 },
+    { "id": "basic-same", "group": "basic", "input": { "s": "bbbbb" }, "expected": 1 },
+    { "id": "basic-middle", "group": "basic", "input": { "s": "pwwkew" }, "expected": 3 },
+    { "id": "basic-dvdf", "group": "basic", "input": { "s": "dvdf" }, "expected": 3 },
+    { "id": "edge-empty", "group": "edge", "input": { "s": "" }, "expected": 0 },
+    { "id": "edge-space", "group": "edge", "input": { "s": " " }, "expected": 1 },
+    { "id": "edge-all-unique", "group": "edge", "input": { "s": "abcdef" }, "expected": 6 },
+    { "id": "edge-abba", "group": "edge", "input": { "s": "abba" }, "expected": 2 },
+    { "id": "edge-left-jump", "group": "edge", "input": { "s": "tmmzuxt" }, "expected": 5 },
+    { "id": "edge-best-at-end", "group": "edge", "input": { "s": "aab" }, "expected": 2 }
+  ],
+  "large": { "sizes": [100, 1000, 10000, 100000], "seed": 11 }
+}

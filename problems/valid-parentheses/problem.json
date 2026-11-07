@@ -1,0 +1,46 @@
+{
+  "id": "valid-parentheses",
+  "title": "Paranteze echilibrate",
+  "category": "stack",
+  "difficulty": "easy",
+  "statement": "Se dă un șir `s` format doar din caracterele `(`, `)`, `[`, `]`, `{` și `}`. Returnează `True` dacă parantezele sunt echilibrate și `False` altfel.\n\nUn șir este echilibrat dacă fiecare paranteză deschisă este închisă de o paranteză de același tip, iar parantezele se închid în ordinea corectă.",
+  "examples": [
+    { "input": { "s": "()[]{}" }, "output": true },
+    { "input": { "s": "([)]" }, "output": false, "explanation": "Paranteza `[` este închisă înaintea parantezei `(` deschise înaintea ei." }
+  ],
+  "signature": {
+    "function": "is_balanced",
+    "params": [{ "name": "s", "type": "str" }],
+    "returns": "bool"
+  },
+  "constraints": [
+    "1 ≤ len(s) ≤ 10⁵",
+    "s conține doar caracterele ()[]{}"
+  ],
+  "timeLimitMs": 1000,
+  "comparator": "exact",
+  "forbiddenTerms": [
+    { "term": "stivă", "allowedIfCode": "\\.append\\(|\\.pop\\(" },
+    { "term": "stiva", "allowedIfCode": "\\.append\\(|\\.pop\\(" },
+    { "term": "stack", "allowedIfCode": "\\.append\\(|\\.pop\\(" },
+    { "term": "LIFO" },
+    { "term": "push" },
+    { "term": "pop", "allowedIfCode": "\\.pop\\(" },
+    { "term": "ultima paranteză deschisă" },
+    { "term": "vârful" }
+  ],
+  "tests": [
+    { "id": "basic-simple", "group": "basic", "input": { "s": "()" }, "expected": true },
+    { "id": "basic-all-types", "group": "basic", "input": { "s": "()[]{}" }, "expected": true },
+    { "id": "basic-nested", "group": "basic", "input": { "s": "{[()]}" }, "expected": true },
+    { "id": "basic-wrong-type", "group": "basic", "input": { "s": "(]" }, "expected": false },
+    { "id": "basic-crossed", "group": "basic", "input": { "s": "([)]" }, "expected": false },
+    { "id": "edge-single-open", "group": "edge", "input": { "s": "(" }, "expected": false },
+    { "id": "edge-single-close", "group": "edge", "input": { "s": "]" }, "expected": false },
+    { "id": "edge-only-opens", "group": "edge", "input": { "s": "(([" }, "expected": false },
+    { "id": "edge-close-first", "group": "edge", "input": { "s": "](){}" }, "expected": false },
+    { "id": "edge-unclosed-at-end", "group": "edge", "input": { "s": "()[]{" }, "expected": false },
+    { "id": "edge-deep", "group": "edge", "input": { "s": "((([[[{{{}}}]]])))" }, "expected": true }
+  ],
+  "large": { "sizes": [100, 1000, 10000, 100000], "seed": 7 }
+}
