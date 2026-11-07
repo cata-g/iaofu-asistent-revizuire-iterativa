@@ -18,6 +18,7 @@ import ro.upb.iaofu.reviewer.common.ConflictException;
 import ro.upb.iaofu.reviewer.common.NotFoundException;
 import ro.upb.iaofu.reviewer.execution.ExecutionService;
 import ro.upb.iaofu.reviewer.execution.TestReport;
+import ro.upb.iaofu.reviewer.observation.ObservationService;
 
 class SessionServiceTest {
 
@@ -25,7 +26,7 @@ class SessionServiceTest {
     private final SubmissionRepository submissions = mock(SubmissionRepository.class);
     private final ExecutionService execution = mock(ExecutionService.class);
     private final SessionService service = new SessionService(sessions, submissions, Fixtures.problems(), execution,
-            Fixtures.JSON);
+            mock(ObservationService.class), Fixtures.JSON);
     private final TestReport report = Fixtures.json("two-sum/report-v2.json", TestReport.class);
 
     private Session existing(Mode mode) {
@@ -52,9 +53,7 @@ class SessionServiceTest {
     @Test
     void submissionsGetIncreasingVersions() {
         Session s = existing(Mode.BASELINE_A);
-        Submission previous = new Submission(s.getId(), 1, "v1");
-        when(submissions.findTopBySessionIdOrderByVersionDesc(s.getId())).thenReturn(Optional.of(previous));
-        when(execution.evaluate(any(), anyString())).thenReturn(report);
+        previousVersion(s);
 
         SessionDtos.SubmissionResponse response = service.submit(s.getId(), "v2");
 
@@ -65,6 +64,36 @@ class SessionServiceTest {
         assertThat(saved.getValue().getPassed()).isEqualTo(11);
         assertThat(saved.getValue().getEfficiency()).isEqualTo("ok");
         assertThat(saved.getValue().getReportJson()).contains("edge-half-target-once");
+    }
+
+    private void previousVersion(Session s) {
+        Submission previous = new Submission(s.getId(), 1, "v1");
+        previous.setReport(Fixtures.text("two-sum/report-v1.json"), 12, 14, "too_slow", 2.05);
+        when(submissions.findTopBySessionIdOrderByVersionDesc(s.getId())).thenReturn(Optional.of(previous));
+        when(execution.evaluate(any(), anyString())).thenReturn(report);
+    }
+
+    @Test
+    void classificationIsShownOnlyInTheProposedMode() {
+        Session proposed = existing(Mode.PROPOSED);
+        previousVersion(proposed);
+        assertThat(service.submit(proposed.getId(), "v2").classification().regression()).hasSize(3);
+
+        Session baseline = existing(Mode.BASELINE_B);
+        previousVersion(baseline);
+        assertThat(service.submit(baseline.getId(), "v2").classification()).isNull();
+    }
+
+    @Test
+    void classificationIsStoredForEveryMode() {
+        Session baseline = existing(Mode.BASELINE_A);
+        previousVersion(baseline);
+
+        service.submit(baseline.getId(), "v2");
+
+        ArgumentCaptor<Submission> saved = ArgumentCaptor.forClass(Submission.class);
+        verify(submissions).save(saved.capture());
+        assertThat(saved.getValue().getClassificationJson()).contains("edge-zeros").contains("\"previousVersion\":1");
     }
 
     @Test

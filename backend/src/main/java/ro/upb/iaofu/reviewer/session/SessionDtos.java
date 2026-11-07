@@ -2,10 +2,12 @@ package ro.upb.iaofu.reviewer.session;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 import ro.upb.iaofu.reviewer.execution.TestReport;
-import tools.jackson.databind.JsonNode;
+import ro.upb.iaofu.reviewer.observation.ObservationView;
+import ro.upb.iaofu.reviewer.version.Classification;
 
 /** Request and response bodies of /api/sessions (docs/contracte.md section 6). */
 public final class SessionDtos {
@@ -27,9 +29,25 @@ public final class SessionDtos {
             UUID submissionId,
             int version,
             TestReport report,
-            JsonNode classification,
-            List<?> observations,
+            Classification classification,
+            List<ObservationView> observations,
             String assistantMessage,
             String llmStatus) {
+    }
+
+    public record VersionView(
+            int version,
+            UUID submissionId,
+            String code,
+            Instant createdAt,
+            TestReport.Summary summary,
+            String efficiency,
+            TestReport report,
+            Classification classification,
+            List<ObservationView> observations,
+            String assistantMessage) {
+    }
+
+    public record HistoryResponse(UUID sessionId, String problemId, boolean finished, List<VersionView> versions) {
     }
 }

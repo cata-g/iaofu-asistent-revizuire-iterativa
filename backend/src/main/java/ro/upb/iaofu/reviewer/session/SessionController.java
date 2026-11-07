@@ -3,6 +3,7 @@ package ro.upb.iaofu.reviewer.session;
 import jakarta.validation.Valid;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +31,11 @@ public class SessionController {
     public SessionDtos.SubmissionResponse submit(@PathVariable UUID id,
                                                  @Valid @RequestBody SessionDtos.SubmitRequest request) {
         return sessions.submit(id, request.code());
+    }
+
+    @GetMapping("/{id}/history")
+    public SessionDtos.HistoryResponse history(@PathVariable UUID id) {
+        return sessions.history(id);
     }
 
     @PostMapping("/{id}/finish")
