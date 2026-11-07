@@ -1,0 +1,14 @@
+{
+  "previousVersion": 1,
+  "resolved": [
+    { "testId": "large-10000", "group": "large" },
+    { "testId": "large-100000", "group": "large" }
+  ],
+  "regression": [
+    { "testId": "edge-same-value-twice", "group": "edge" },
+    { "testId": "edge-half-target-once", "group": "edge" },
+    { "testId": "edge-zeros", "group": "edge" }
+  ],
+  "remaining": [],
+  "efficiency": { "before": "too_slow", "after": "ok" }
+}

@@ -1,0 +1,122 @@
+{
+  "status": "ok",
+  "error": null,
+  "summary": {
+    "passed": 12,
+    "total": 14
+  },
+  "tests": [
+    {
+      "id": "basic-1",
+      "group": "basic",
+      "passed": true,
+      "timeMs": 0.009
+    },
+    {
+      "id": "basic-2",
+      "group": "basic",
+      "passed": true,
+      "timeMs": 0.007
+    },
+    {
+      "id": "basic-3",
+      "group": "basic",
+      "passed": true,
+      "timeMs": 0.004
+    },
+    {
+      "id": "basic-4",
+      "group": "basic",
+      "passed": true,
+      "timeMs": 0.003
+    },
+    {
+      "id": "edge-same-value-twice",
+      "group": "edge",
+      "passed": true,
+      "timeMs": 0.002
+    },
+    {
+      "id": "edge-half-target-once",
+      "group": "edge",
+      "passed": true,
+      "timeMs": 0.003
+    },
+    {
+      "id": "edge-negatives",
+      "group": "edge",
+      "passed": true,
+      "timeMs": 0.002
+    },
+    {
+      "id": "edge-zeros",
+      "group": "edge",
+      "passed": true,
+      "timeMs": 0.002
+    },
+    {
+      "id": "edge-pair-at-end",
+      "group": "edge",
+      "passed": true,
+      "timeMs": 0.004
+    },
+    {
+      "id": "edge-large-values",
+      "group": "edge",
+      "passed": true,
+      "timeMs": 0.002
+    },
+    {
+      "id": "large-100",
+      "group": "large",
+      "passed": true,
+      "timeMs": 0.194
+    },
+    {
+      "id": "large-1000",
+      "group": "large",
+      "passed": true,
+      "timeMs": 21.55
+    },
+    {
+      "id": "large-10000",
+      "group": "large",
+      "passed": false,
+      "input": "n = 10000 (generat)",
+      "error": "timeout",
+      "timeMs": null
+    },
+    {
+      "id": "large-100000",
+      "group": "large",
+      "passed": false,
+      "input": "n = 100000 (generat)",
+      "error": "skipped",
+      "timeMs": null
+    }
+  ],
+  "timings": [
+    {
+      "n": 100,
+      "status": "ok",
+      "timeMs": 0.194
+    },
+    {
+      "n": 1000,
+      "status": "ok",
+      "timeMs": 21.55
+    },
+    {
+      "n": 10000,
+      "status": "timeout",
+      "timeMs": null
+    },
+    {
+      "n": 100000,
+      "status": "skipped",
+      "timeMs": null
+    }
+  ],
+  "slope": 2.05,
+  "efficiency": "too_slow"
+}

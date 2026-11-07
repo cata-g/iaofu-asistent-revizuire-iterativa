@@ -9,7 +9,7 @@ services:
       # Default output limit is 1024 chars, too small for JSON test results.
       PISTON_OUTPUT_MAX_SIZE: "65536"
       # Upper bound for the per-request run_timeout (ms).
-      PISTON_RUN_TIMEOUT: "10000"
+      PISTON_RUN_TIMEOUT: "30000"
     volumes:
       - piston-packages:/piston/packages
     tmpfs:

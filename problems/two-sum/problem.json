@@ -1,0 +1,59 @@
+{
+  "id": "two-sum",
+  "title": "Suma a două numere",
+  "category": "hashing",
+  "difficulty": "easy",
+  "statement": "Se dă un vector de numere întregi `nums` și un număr întreg `target`. Returnează indicii celor două numere din `nums` a căror sumă este `target`.\n\nFiecare input are exact o soluție, iar același element nu poate fi folosit de două ori. Indicii pot fi returnați în orice ordine.",
+  "examples": [
+    {
+      "input": { "nums": [2, 7, 11, 15], "target": 9 },
+      "output": [0, 1],
+      "explanation": "nums[0] + nums[1] = 2 + 7 = 9."
+    },
+    {
+      "input": { "nums": [3, 3], "target": 6 },
+      "output": [0, 1]
+    }
+  ],
+  "signature": {
+    "function": "two_sum",
+    "params": [
+      { "name": "nums", "type": "list[int]" },
+      { "name": "target", "type": "int" }
+    ],
+    "returns": "list[int]"
+  },
+  "constraints": [
+    "2 ≤ len(nums) ≤ 10⁵",
+    "-10⁹ ≤ nums[i] ≤ 10⁹",
+    "-2·10⁹ ≤ target ≤ 2·10⁹",
+    "Există exact o soluție."
+  ],
+  "timeLimitMs": 1000,
+  "comparator": "unordered",
+  "forbiddenTerms": [
+    { "term": "dicționar", "allowedIfCode": "\\{\\s*\\}|dict\\(" },
+    { "term": "dictionar", "allowedIfCode": "\\{\\s*\\}|dict\\(" },
+    { "term": "dict", "allowedIfCode": "\\{\\s*\\}|dict\\(" },
+    { "term": "hash" },
+    { "term": "hashmap" },
+    { "term": "tabel de dispersie" },
+    { "term": "set", "allowedIfCode": "set\\(" },
+    { "term": "mulțime", "allowedIfCode": "set\\(" },
+    { "term": "complement" },
+    { "term": "o singură parcurgere" }
+  ],
+  "tests": [
+    { "id": "basic-1", "group": "basic", "input": { "nums": [2, 7, 11, 15], "target": 9 }, "expected": [0, 1] },
+    { "id": "basic-2", "group": "basic", "input": { "nums": [1, 5, 3, 8, 6], "target": 14 }, "expected": [3, 4] },
+    { "id": "basic-3", "group": "basic", "input": { "nums": [10, 20, 30, 40, 50], "target": 90 }, "expected": [3, 4] },
+    { "id": "basic-4", "group": "basic", "input": { "nums": [4, 1, 9, 7], "target": 5 }, "expected": [0, 1] },
+    { "id": "edge-same-value-twice", "group": "edge", "input": { "nums": [3, 3], "target": 6 }, "expected": [0, 1] },
+    { "id": "edge-half-target-once", "group": "edge", "input": { "nums": [3, 2, 4], "target": 6 }, "expected": [1, 2] },
+    { "id": "edge-negatives", "group": "edge", "input": { "nums": [-3, 4, 3, 90], "target": 0 }, "expected": [0, 2] },
+    { "id": "edge-zeros", "group": "edge", "input": { "nums": [0, 4, 3, 0], "target": 0 }, "expected": [0, 3] },
+    { "id": "edge-pair-at-end", "group": "edge", "input": { "nums": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], "target": 19 }, "expected": [8, 9] },
+    { "id": "edge-large-values", "group": "edge", "input": { "nums": [1000000000, -1000000000, 5], "target": 0 }, "expected": [0, 1] }
+  ],
+  "large": { "sizes": [100, 1000, 10000, 100000], "seed": 18 }
+}

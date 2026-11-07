@@ -1,0 +1,169 @@
+{
+  "status": "ok",
+  "error": null,
+  "summary": {
+    "passed": 11,
+    "total": 14
+  },
+  "tests": [
+    {
+      "id": "basic-1",
+      "group": "basic",
+      "passed": true,
+      "timeMs": 0.007
+    },
+    {
+      "id": "basic-2",
+      "group": "basic",
+      "passed": true,
+      "timeMs": 0.004
+    },
+    {
+      "id": "basic-3",
+      "group": "basic",
+      "passed": true,
+      "timeMs": 0.003
+    },
+    {
+      "id": "basic-4",
+      "group": "basic",
+      "passed": true,
+      "timeMs": 0.002
+    },
+    {
+      "id": "edge-same-value-twice",
+      "group": "edge",
+      "passed": false,
+      "input": {
+        "nums": [
+          3,
+          3
+        ],
+        "target": 6
+      },
+      "expected": [
+        0,
+        1
+      ],
+      "actual": [
+        0,
+        0
+      ],
+      "error": null,
+      "timeMs": 0.002
+    },
+    {
+      "id": "edge-half-target-once",
+      "group": "edge",
+      "passed": false,
+      "input": {
+        "nums": [
+          3,
+          2,
+          4
+        ],
+        "target": 6
+      },
+      "expected": [
+        1,
+        2
+      ],
+      "actual": [
+        0,
+        0
+      ],
+      "error": null,
+      "timeMs": 0.002
+    },
+    {
+      "id": "edge-negatives",
+      "group": "edge",
+      "passed": true,
+      "timeMs": 0.002
+    },
+    {
+      "id": "edge-zeros",
+      "group": "edge",
+      "passed": false,
+      "input": {
+        "nums": [
+          0,
+          4,
+          3,
+          0
+        ],
+        "target": 0
+      },
+      "expected": [
+        0,
+        3
+      ],
+      "actual": [
+        0,
+        0
+      ],
+      "error": null,
+      "timeMs": 0.001
+    },
+    {
+      "id": "edge-pair-at-end",
+      "group": "edge",
+      "passed": true,
+      "timeMs": 0.002
+    },
+    {
+      "id": "edge-large-values",
+      "group": "edge",
+      "passed": true,
+      "timeMs": 0.002
+    },
+    {
+      "id": "large-100",
+      "group": "large",
+      "passed": true,
+      "timeMs": 0.01
+    },
+    {
+      "id": "large-1000",
+      "group": "large",
+      "passed": true,
+      "timeMs": 0.108
+    },
+    {
+      "id": "large-10000",
+      "group": "large",
+      "passed": true,
+      "timeMs": 0.873
+    },
+    {
+      "id": "large-100000",
+      "group": "large",
+      "passed": true,
+      "timeMs": 18.357
+    }
+  ],
+  "timings": [
+    {
+      "n": 100,
+      "status": "ok",
+      "timeMs": 0.01
+    },
+    {
+      "n": 1000,
+      "status": "ok",
+      "timeMs": 0.108
+    },
+    {
+      "n": 10000,
+      "status": "ok",
+      "timeMs": 0.873
+    },
+    {
+      "n": 100000,
+      "status": "ok",
+      "timeMs": 18.357
+    }
+  ],
+  "slope": 1.07,
+  "efficiency": "ok"
+}

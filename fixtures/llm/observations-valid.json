@@ -1,0 +1,26 @@
+{
+  "observations": [
+    {
+      "type": "edge_case",
+      "line": 4,
+      "evidenceInput": { "nums": [3, 2, 4], "target": 6 },
+      "risk": "Elementul curent este adăugat în dicționar înainte de căutare, așa că poate fi împerecheat cu el însuși și răspunsul conține același index de două ori.",
+      "hints": [
+        "Pe [3, 2, 4] cu target 6 primești [0, 0]. Ce index apare de două ori?",
+        "Contează ordinea în care adaugi și cauți în dicționar?",
+        "Verifică complementul înainte să adaugi elementul curent în dicționar."
+      ]
+    },
+    {
+      "type": "correctness",
+      "line": 6,
+      "evidenceInput": { "nums": [1, 2], "target": 3 },
+      "risk": "Funcția poate returna o listă goală.",
+      "hints": [
+        "Ce se întâmplă când bucla se termină fără să returneze?",
+        "Gândește-te la cazul în care perechea e la final.",
+        "Returnarea listei goale este atinsă doar dacă nu există soluție."
+      ]
+    }
+  ]
+}
