@@ -31,7 +31,30 @@ docker compose up --build
 
 La prima pornire, containerul `piston-init` instalează Python 3.12 în Piston, ceea ce durează aproximativ un minut.
 
-Varianta testată se alege din URL: `http://localhost:5173/?mode=baseline_a&participant=P3`. Valorile pentru `mode` sunt `proposed`, `baseline_a` și `baseline_b`. Participantul nu vede varianta.
+Varianta testată se alege din URL: `http://localhost:5173/?mode=baseline_a&participant=P3`. Valorile pentru `mode` sunt `proposed` (implicit), `baseline_a` și `baseline_b`. Aplicația păstrează parametrii pentru tab-ul curent și îi scoate din bara de adrese, deci participantul nu vede varianta.
+
+## Studiul cu utilizatori
+
+```
+python scripts/study_links.py <P1> <P2> <P3> --base-url http://<ip>:5173
+```
+
+Scriptul afișează, pentru fiecare participant, linkurile celor trei probleme, în ordinea rotită din PRD 10.2. Fiecare link se deschide într-un **tab nou**. În același tab, aplicația reia sesiunea deschisă anterior pentru acea problemă.
+
+După studiu, jurnalul se descarcă ca CSV:
+
+```
+curl -O http://localhost:8080/api/export/sessions.csv
+# la fel: submissions, observations, hint_reveals, feedback, llm_calls
+```
+
+## Evaluarea automată
+
+```
+python scripts/eval/run_eval.py --set tuning
+```
+
+Runner-ul rulează lanțurile de versiuni prin toate variantele și calculează metricile din PRD 10.1. Detalii în [`scripts/eval/README.md`](scripts/eval/README.md).
 
 ## Dezvoltare
 
@@ -66,9 +89,9 @@ python scripts/check_problem.py problems/<id> --run versiune.py   # rulează o s
 
 | Variabilă | Implicit | Rol |
 |---|---|---|
-| `ANTHROPIC_API_KEY` | (lipsă) | cheia LLM, doar în `.env` |
+| `ANTHROPIC_API_KEY` | (lipsă) | cheia LLM, doar în `.env`; fără ea, aplicația merge doar cu rezultatele testelor |
 | `LLM_MODEL` | `claude-haiku-5-5` | modelul pentru observații și Baseline B |
-| `LLM_BUDGET_USD` | `1.00` | plafonul de cost; după atingerea lui se afișează doar rezultatele testelor |
+| `LLM_BUDGET_USD` | `1.00` | plafonul de cost, adunat din tabela `llm_call`; după atingerea lui se afișează doar rezultatele testelor |
 | `PISTON_URL` | `http://localhost:2000` | |
 | `PROBLEMS_DIR` | `../problems` | |
 | `DB_URL`, `DB_USER`, `DB_PASSWORD` | H2 în memorie | în compose: PostgreSQL |
@@ -76,10 +99,10 @@ python scripts/check_problem.py problems/<id> --run versiune.py   # rulează o s
 ## Structura
 
 ```
-backend/    Spring Boot 4, Java 21
+backend/    Spring Boot 4, Java 21; promptul în src/main/resources/prompts/
 frontend/   React, Vite, TypeScript, Monaco
-problems/   setul de probleme (enunț, teste, referință, generator)
+problems/   setul de probleme (enunț, teste, referință, generator, lanțul de versiuni) și split.json
 fixtures/   date de test pentru dezvoltare
-scripts/    verificarea problemelor, testele în Docker
+scripts/    verificarea problemelor, testele în Docker, evaluarea, linkurile pentru studiu
 docs/       PRD și contracte
 ```

@@ -33,31 +33,35 @@ Un student rezolvă o problemă de algoritmică în mai multe versiuni; la fieca
 | Termenul „versiuni”, nu „tranziții” | Decizie de vocabular: `VersionClassifier`, „clasificatorul de versiuni” |
 | Muncă pe **felii verticale**, nu pe straturi | Fiecare membru face puțin din toate și poate lucra asincron |
 
-## 4. Starea proiectului (7 noiembrie 2026)
+## 4. Starea proiectului (7 noiembrie 2026, seara)
 
-Gata:
+Prototipul merge cap-coadă: `docker compose up --build` pornește toată aplicația cu cele trei variante.
 
-- PRD în [`docs/PRD.md`](docs/PRD.md).
-- 9 issues deschise, **#29-#37**, toate asignate momentan lui `cata-g`; fiecare spune ce trebuie să meargă, de ce depinde, ce cerințe din PRD acoperă și criteriile de acceptare. Issues-urile vechi #1-#28 sunt închise ca „not planned” (prea granulare și prea legate între ele).
-- Label-uri de etapă: `fezabilitate`, `etapa-1`, `control`, `etapa-2`, `test-utilizatori`, `final`. Label-urile pe straturi (`frontend`, `backend`, `ia`, `date`, `evaluare`, `infra`, `docs`) mai există doar pentru issues-urile vechi.
-- Board GitHub Project creat de Cătălin, cu issues-urile importate.
-- În afara repo-ului: documentul Google Docs al propunerii și un plan pentru Etapa 1 cu prezentare de 7 slide-uri.
+| Issue | Stare |
+|---|---|
+| #29 Fundația și contractele | gata (PR #38). **Contractele din `docs/contracte.md` trebuie revizuite de toți trei.** |
+| #30 Execuție și Baseline A | gata (PR #39) |
+| #32 Versiuni și indicii gradate | gata (PR #40) |
+| #31 Observații verificate și Baseline B | gata (PR #41) |
+| #33 Setul de probleme | 5 probleme de **reglare**, cu lanțuri (PR #42). **Setul de test îl scrie echipa** (vezi mai jos). |
+| #34 Integrare | gata (PR #43) |
+| #35 Evaluarea | runner-ul și metricile sunt gata; notebook-ul și analiza erorilor rămân de făcut |
+| #36, #37 | de făcut |
 
-Cod: **încă nimic**. Primul pas e #29.
+Decizii luate în implementare (de revizuit):
 
-| Issue | Ce | Cine |
-|---|---|---|
-| #29 | Fundația și contractele | toți, o sesiune |
-| #30 | Execuție și Baseline A, cap-coadă | A |
-| #31 | Observații verificate și Baseline B, cap-coadă | B |
-| #32 | Versiuni și indicii gradate, cap-coadă | C |
-| #33 | Setul de probleme și lanțurile de versiuni | toți, câte o treime |
-| #34 | Integrare: fluxul complet v1 → v2 | primul care termină |
-| #35 | Evaluarea automată și analiza erorilor | neasignat |
-| #36 | Studiul cu utilizatori | toți |
-| #37 | Livrabile: Etapa 1, Etapa 2, Final | toți |
+- **LLM:** SDK-ul oficial Anthropic pentru Java, modelul `claude-haiku-5-5`, thinking adaptiv la effort `low`, ieșire structurată. ~0,0005 $ per trimitere. Plafonul de cost e impus în cod (`LLM_BUDGET_USD`).
+- **UI:** MUI. Monaco e inclus în bundle, ca studiul să meargă și fără internet.
+- **Filtrul anti-scurgere** verifică și riscul (afișat odată cu nivelul 1). Termenii lungi prind și formele flexionate. `allowedIfCode` permite un termen dacă studentul folosește deja construcția.
+- **Verificatorul** respinge inputurile care nu respectă constrângerile (`inputs.is_valid`), ca să nu „confirme” observații pe inputuri imposibile.
+- LLM-ul **nu e apelat** când toate testele trec, în nicio variantă.
+- Clasificarea se salvează pentru toate variantele (pentru analiză), dar se afișează doar în `proposed`.
 
-## 5. Primul task în Claude Code: #29
+De ce setul de test îl scrie echipa: lanțurile și observațiile de referință din setul de reglare le-a scris Claude. Dacă și setul de test ar fi scris tot de Claude, evaluarea unui sistem bazat pe Claude ar fi circulară.
+
+Rezultatul pe setul de reglare (15 versiuni): precizie 0,81, recall 0,80, acuratețea clasificării 1,0. Cu `correctness` și `edge_case` considerate același tip, precizia și recall-ul ajung la 1,0. Baseline B a dat cod în 15 din 15 răspunsuri. **Nu sunt cifre pentru raport**: setul de reglare a fost scris odată cu promptul.
+
+## 5. Primul task: #29 (încheiat)
 
 Rezultatul: după #29, fiecare felie (#30, #31, #32) poate porni doar cu `fixtures/`.
 
@@ -104,6 +108,6 @@ Exemplul two sum folosit peste tot în documentație:
 ## 8. Întrebări deschise
 
 - Confirmarea interpretării „modificării de cod” cu profesorul.
-- SDK-ul LLM: SDK-ul oficial Anthropic pentru Java sau Spring AI.
-- Biblioteca de componente: shadcn/ui sau MUI.
 - Username-urile GitHub ale celor doi colegi și cine e A, B, C.
+- ~~SDK-ul LLM~~: SDK-ul oficial Anthropic pentru Java.
+- ~~Biblioteca de componente~~: MUI.
