@@ -95,10 +95,28 @@ class ApiIntegrationTest {
                 // baseline_a never shows the classification
                 .andExpect(jsonPath("$.versions[1].classification").doesNotExist());
 
+        // F18: the variant appears in no response the participant's browser receives
+        String history = mvc.perform(get("/api/sessions/{id}/history", sessionId)).andReturn().getResponse()
+                .getContentAsString();
+        assertThat(history).doesNotContain("baseline_a").doesNotContain("\"mode\"");
+
+        String csv = mvc.perform(get("/api/export/submissions.csv")).andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        assertThat(csv.lines().findFirst().orElseThrow()).startsWith("id,session_id,version,code");
+        assertThat(csv).contains(sessionId);
+        assertThat(mvc.perform(get("/api/export/sessions.csv")).andReturn().getResponse().getContentAsString())
+                .contains("baseline_a");
+
         mvc.perform(post("/api/sessions/{id}/finish", sessionId)).andExpect(status().isNoContent());
         mvc.perform(get("/api/sessions/{id}/history", sessionId)).andExpect(jsonPath("$.finished").value(true));
         mvc.perform(post("/api/sessions/{id}/submissions", sessionId).contentType(MediaType.APPLICATION_JSON)
                 .content("{\"code\":\"v3\"}")).andExpect(status().isConflict());
+    }
+
+    @Test
+    void exportOnlyKnownTables() throws Exception {
+        mvc.perform(get("/api/export/llm_calls.csv")).andExpect(status().isOk());
+        mvc.perform(get("/api/export/pg_user.csv")).andExpect(status().isNotFound());
     }
 
     @Test
