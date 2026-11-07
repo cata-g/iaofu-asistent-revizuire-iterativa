@@ -18,6 +18,8 @@ import ro.upb.iaofu.reviewer.common.ConflictException;
 import ro.upb.iaofu.reviewer.common.NotFoundException;
 import ro.upb.iaofu.reviewer.execution.ExecutionService;
 import ro.upb.iaofu.reviewer.execution.TestReport;
+import ro.upb.iaofu.reviewer.feedback.FeedbackStrategies;
+import ro.upb.iaofu.reviewer.feedback.FeedbackStrategy;
 import ro.upb.iaofu.reviewer.observation.ObservationService;
 
 class SessionServiceTest {
@@ -25,8 +27,15 @@ class SessionServiceTest {
     private final SessionRepository sessions = mock(SessionRepository.class);
     private final SubmissionRepository submissions = mock(SubmissionRepository.class);
     private final ExecutionService execution = mock(ExecutionService.class);
+    private final FeedbackStrategies strategies = mock(FeedbackStrategies.class);
     private final SessionService service = new SessionService(sessions, submissions, Fixtures.problems(), execution,
-            mock(ObservationService.class), Fixtures.JSON);
+            mock(ObservationService.class), strategies, Fixtures.JSON);
+
+    {
+        FeedbackStrategy none = mock(FeedbackStrategy.class);
+        when(none.produce(any(), any())).thenReturn(FeedbackStrategy.Result.notUsed());
+        when(strategies.forMode(any())).thenReturn(none);
+    }
     private final TestReport report = Fixtures.json("two-sum/report-v2.json", TestReport.class);
 
     private Session existing(Mode mode) {

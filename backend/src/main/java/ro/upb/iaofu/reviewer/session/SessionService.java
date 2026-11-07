@@ -10,33 +10,38 @@ import ro.upb.iaofu.reviewer.common.ConflictException;
 import ro.upb.iaofu.reviewer.common.NotFoundException;
 import ro.upb.iaofu.reviewer.execution.ExecutionService;
 import ro.upb.iaofu.reviewer.execution.TestReport;
+import ro.upb.iaofu.reviewer.feedback.FeedbackStrategies;
+import ro.upb.iaofu.reviewer.feedback.FeedbackStrategy;
+import ro.upb.iaofu.reviewer.observation.ObservationPrompt;
 import ro.upb.iaofu.reviewer.observation.ObservationService;
 import ro.upb.iaofu.reviewer.observation.ObservationView;
 import ro.upb.iaofu.reviewer.problem.Problem;
 import ro.upb.iaofu.reviewer.problem.ProblemRepository;
 import ro.upb.iaofu.reviewer.version.Classification;
+import ro.upb.iaofu.reviewer.version.DiffService;
 import ro.upb.iaofu.reviewer.version.VersionClassifier;
 import tools.jackson.databind.json.JsonMapper;
 
 @Service
 public class SessionService {
 
-    static final String LLM_NOT_USED = "not_used";
-
     private final SessionRepository sessions;
     private final SubmissionRepository submissions;
     private final ProblemRepository problems;
     private final ExecutionService execution;
     private final ObservationService observations;
+    private final FeedbackStrategies strategies;
     private final JsonMapper json;
 
     public SessionService(SessionRepository sessions, SubmissionRepository submissions, ProblemRepository problems,
-                          ExecutionService execution, ObservationService observations, JsonMapper json) {
+                          ExecutionService execution, ObservationService observations, FeedbackStrategies strategies,
+                          JsonMapper json) {
         this.sessions = sessions;
         this.submissions = submissions;
         this.problems = problems;
         this.execution = execution;
         this.observations = observations;
+        this.strategies = strategies;
         this.json = json;
     }
 
@@ -67,12 +72,23 @@ public class SessionService {
         submission.setReport(json.writeValueAsString(report), report.summary().passed(), report.summary().total(),
                 report.efficiency(), report.slope());
         submission.setClassificationJson(classification == null ? null : json.writeValueAsString(classification));
-        submission.setLlmStatus(LLM_NOT_USED);
+        submission.setLlmStatus(FeedbackStrategy.LLM_NOT_USED);
+        // Saved before the feedback so observations and LLM calls can reference it.
+        submissions.saveAndFlush(submission);
+
+        String diff = previous.map(p -> DiffService.unifiedDiff(p.getVersion(), p.getCode(), version, code)).orElse(null);
+        ObservationPrompt.Context context = new ObservationPrompt.Context(problem, version, code, diff, report,
+                classification);
+        FeedbackStrategy.Result feedback = strategies.forMode(session.getMode()).produce(submission.getId(), context);
+
+        submission.setAssistantMessage(feedback.assistantMessage());
+        submission.setLlmStatus(feedback.llmStatus());
         submission.setDurationMs(System.currentTimeMillis() - start);
         submissions.save(submission);
 
         return new SessionDtos.SubmissionResponse(submission.getId(), version, report,
-                visibleClassification(session, classification), List.of(), null, LLM_NOT_USED);
+                visibleClassification(session, classification), feedback.observations(), feedback.assistantMessage(),
+                feedback.llmStatus());
     }
 
     @Transactional
