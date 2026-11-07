@@ -1,0 +1,8 @@
+def merge(intervals: list[list[int]]) -> list[list[int]]:
+    result = []
+    for start, end in intervals:
+        if result and start <= result[-1][1]:
+            result[-1][1] = max(result[-1][1], end)
+        else:
+            result.append([start, end])
+    return result

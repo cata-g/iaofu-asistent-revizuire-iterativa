@@ -1,0 +1,54 @@
+{
+  "id": "first-position",
+  "title": "Prima poziție a fiecărei valori",
+  "category": "binary-search",
+  "difficulty": "medium",
+  "statement": "Se dă un vector `nums` ordonat crescător, care poate conține valori repetate, și o listă de interogări `queries`. Pentru fiecare valoare din `queries`, returnează indicele primei apariții a valorii în `nums`, sau `-1` dacă valoarea nu apare.\n\nRezultatul este o listă cu un răspuns pentru fiecare interogare, în aceeași ordine.",
+  "examples": [
+    {
+      "input": { "nums": [1, 2, 2, 2, 3], "queries": [2, 3, 4] },
+      "output": [1, 4, -1],
+      "explanation": "Valoarea 2 apare prima dată la indicele 1, valoarea 3 la indicele 4, iar 4 nu apare."
+    }
+  ],
+  "signature": {
+    "function": "first_positions",
+    "params": [
+      { "name": "nums", "type": "list[int]" },
+      { "name": "queries", "type": "list[int]" }
+    ],
+    "returns": "list[int]"
+  },
+  "constraints": [
+    "1 ≤ len(nums) ≤ 10⁵",
+    "1 ≤ len(queries) ≤ 10⁵",
+    "-10⁹ ≤ nums[i], queries[j] ≤ 10⁹",
+    "nums este ordonat crescător"
+  ],
+  "timeLimitMs": 1000,
+  "comparator": "exact",
+  "forbiddenTerms": [
+    { "term": "căutare binară", "allowedIfCode": "//\\s*2|>>\\s*1" },
+    { "term": "cautare binara", "allowedIfCode": "//\\s*2|>>\\s*1" },
+    { "term": "binary", "allowedIfCode": "//\\s*2|>>\\s*1" },
+    { "term": "bisect" },
+    { "term": "înjumătățește" },
+    { "term": "jumătate", "allowedIfCode": "//\\s*2|>>\\s*1" },
+    { "term": "mijloc", "allowedIfCode": "//\\s*2|>>\\s*1" },
+    { "term": "logaritmic" },
+    { "term": "log n" },
+    { "term": "lower bound" }
+  ],
+  "tests": [
+    { "id": "basic-example", "group": "basic", "input": { "nums": [1, 2, 2, 2, 3], "queries": [2, 3, 4] }, "expected": [1, 4, -1] },
+    { "id": "basic-distinct", "group": "basic", "input": { "nums": [1, 3, 5, 7, 9], "queries": [7, 1, 9, 5] }, "expected": [3, 0, 4, 2] },
+    { "id": "basic-repeats", "group": "basic", "input": { "nums": [0, 0, 1, 1, 1, 1, 2, 2], "queries": [1, 2, 0] }, "expected": [2, 6, 0] },
+    { "id": "edge-all-same", "group": "edge", "input": { "nums": [5, 5, 5, 5, 5, 5, 5], "queries": [5] }, "expected": [0] },
+    { "id": "edge-below-all", "group": "edge", "input": { "nums": [2, 4, 6], "queries": [1] }, "expected": [-1] },
+    { "id": "edge-above-all", "group": "edge", "input": { "nums": [2, 4, 6], "queries": [7] }, "expected": [-1] },
+    { "id": "edge-gap", "group": "edge", "input": { "nums": [2, 4, 6], "queries": [5, 3] }, "expected": [-1, -1] },
+    { "id": "edge-single", "group": "edge", "input": { "nums": [-3], "queries": [-3, 0] }, "expected": [0, -1] },
+    { "id": "edge-negative", "group": "edge", "input": { "nums": [-9, -9, -4, 0, 0], "queries": [0, -9] }, "expected": [3, 0] }
+  ],
+  "large": { "sizes": [100, 1000, 10000, 100000], "seed": 31 }
+}

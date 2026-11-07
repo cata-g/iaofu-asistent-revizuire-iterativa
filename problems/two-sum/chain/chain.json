@@ -1,0 +1,47 @@
+{
+  "problemId": "two-sum",
+  "versions": [
+    {
+      "version": 1,
+      "file": "v1.py",
+      "description": "Două bucle: corectă, O(n²).",
+      "expectedFailures": ["large-10000", "large-100000"],
+      "referenceObservations": [
+        {
+          "type": "efficiency",
+          "lines": [2, 3],
+          "severity": "medium",
+          "description": "Verifică toate perechile, deci O(n²); depășește timpul de la n = 10⁴."
+        }
+      ]
+    },
+    {
+      "version": 2,
+      "file": "v2.py",
+      "description": "Dicționar, dar adaugă elementul înainte să caute complementul.",
+      "expectedFailures": ["edge-same-value-twice", "edge-half-target-once", "edge-zeros"],
+      "referenceObservations": [
+        {
+          "type": "edge_case",
+          "lines": [4, 5],
+          "severity": "high",
+          "description": "Când target = 2·x, elementul curent se găsește pe sine: [3, 2, 4] cu target 6 dă [0, 0]."
+        }
+      ]
+    },
+    {
+      "version": 3,
+      "file": "v3.py",
+      "description": "Doi pointeri pe vectorul ordonat, dar returnează indicii din vectorul ordonat, nu din cel original.",
+      "expectedFailures": ["edge-half-target-once", "edge-negatives", "edge-zeros", "edge-large-values", "large-100", "large-1000", "large-10000", "large-100000"],
+      "referenceObservations": [
+        {
+          "type": "correctness",
+          "lines": [2, 7],
+          "severity": "high",
+          "description": "Ordonarea pierde pozițiile originale, deci indicii returnați sunt din vectorul ordonat."
+        }
+      ]
+    }
+  ]
+}

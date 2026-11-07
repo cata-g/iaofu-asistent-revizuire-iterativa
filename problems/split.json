@@ -1,0 +1,5 @@
+{
+  "description": "Împărțirea setului de probleme (PRD 7.3). Setul de reglare se folosește la ajustarea promptului; setul de test nu se rulează până la evaluarea finală.",
+  "tuning": ["two-sum", "valid-parentheses", "longest-unique-substring", "merge-intervals", "first-position"],
+  "test": []
+}
