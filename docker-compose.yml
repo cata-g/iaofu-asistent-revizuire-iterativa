@@ -1,0 +1,39 @@
+name: iaofu
+
+services:
+  piston:
+    image: ghcr.io/engineer-man/piston
+    # Piston's sandbox (isolate) needs privileged mode and cgroup v2 on the host.
+    privileged: true
+    environment:
+      # Default output limit is 1024 chars, too small for JSON test results.
+      PISTON_OUTPUT_MAX_SIZE: "65536"
+      # Upper bound for the per-request run_timeout (ms).
+      PISTON_RUN_TIMEOUT: "10000"
+    volumes:
+      - piston-packages:/piston/packages
+    tmpfs:
+      - /tmp:exec
+    ports:
+      - "127.0.0.1:2000:2000"
+
+  # Installs Python into Piston once; idempotent on later runs.
+  piston-init:
+    image: curlimages/curl:8.11.1
+    depends_on:
+      - piston
+    restart: "no"
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        until curl -sf http://piston:2000/api/v2/runtimes > /dev/null; do sleep 1; done
+        if curl -s http://piston:2000/api/v2/runtimes | grep -q '"python"'; then
+          echo "python already installed"
+        else
+          curl -sf -X POST http://piston:2000/api/v2/packages \
+            -H 'Content-Type: application/json' \
+            -d '{"language":"python","version":"3.12.0"}'
+        fi
+
+volumes:
+  piston-packages:
