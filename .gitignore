@@ -19,3 +19,6 @@ Thumbs.db
 
 # Tooling
 .playwright-mcp/
+
+# Evaluation outputs (commit selected runs explicitly)
+results/
