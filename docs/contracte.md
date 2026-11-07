@@ -62,7 +62,7 @@ def two_sum(nums: list[int], target: int) -> list[int]:
 
 Floats se compară rotunjite la 6 zecimale, iar mulțimile (`set`) ca liste sortate.
 
-**`forbiddenTerms`:** potrivirea se face pe cuvinte întregi, fără să țină cont de majuscule. Când `allowedIfCode` e o expresie regulată care se potrivește cu codul studentului, termenul devine permis. Motivul: dacă studentul folosește deja un dicționar, un indiciu care spune „dicționar” nu dezvăluie nimic nou.
+**`forbiddenTerms`:** potrivirea nu ține cont de majuscule și diacritice. Termenii de cel puțin 5 litere se potrivesc și ca început de cuvânt, ca să prindă formele flexionate („dicționarul”, „mulțimea”). Termenii mai scurți se potrivesc doar ca întreg cuvânt („set” nu prinde „setează”). Când `allowedIfCode` e o expresie regulată care se potrivește cu codul studentului, termenul devine permis. Motivul: dacă studentul folosește deja un dicționar, un indiciu care spune „dicționar” nu dezvăluie nimic nou.
 
 Exemplul complet: [`problems/two-sum/`](../problems/two-sum).
 

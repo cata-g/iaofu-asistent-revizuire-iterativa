@@ -83,7 +83,16 @@ class ApiIntegrationTest {
         assertThat(submissions.findBySessionIdOrderByVersionAsc(java.util.UUID.fromString(sessionId)))
                 .extracting(s -> s.getCode()).containsExactly("v1", "v2");
 
+        mvc.perform(get("/api/sessions/{id}/history", sessionId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.versions.length()").value(2))
+                .andExpect(jsonPath("$.versions[1].code").value("v2"))
+                .andExpect(jsonPath("$.versions[1].summary.passed").value(11))
+                // baseline_a never shows the classification
+                .andExpect(jsonPath("$.versions[1].classification").doesNotExist());
+
         mvc.perform(post("/api/sessions/{id}/finish", sessionId)).andExpect(status().isNoContent());
+        mvc.perform(get("/api/sessions/{id}/history", sessionId)).andExpect(jsonPath("$.finished").value(true));
         mvc.perform(post("/api/sessions/{id}/submissions", sessionId).contentType(MediaType.APPLICATION_JSON)
                 .content("{\"code\":\"v3\"}")).andExpect(status().isConflict());
     }
