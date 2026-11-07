@@ -230,8 +230,22 @@ Măsurăm rezolvarea (câți termină și după câte versiuni), autonomia (nive
 | 12 | Îmbunătățire | O schimbare justificată de date, înghețarea funcțiilor |
 | 13-14 | Etapa finală | Cod, setul de test, raport de 4-6 pagini, demo de 7 minute |
 
-## 13. Întrebări deschise
+## 13. Organizarea muncii
+
+Munca e împărțită pe **felii verticale**, nu pe straturi: fiecare membru duce o funcționalitate cap-coadă (backend, IA, frontend), deci fiecare face puțin din toate.
+
+1. **Contractele întâi, împreună** (#29): schema problemei, schema rezultatelor de test, schema observației, API-ul, modelul de date și datele de test din `fixtures/`. Un contract se schimbă doar prin PR aprobat de toți trei.
+2. **Trei felii în paralel**, fiecare pornind de la `fixtures/`, fără să aștepte după celelalte:
+   - A – execuție și Baseline A (#30);
+   - B – observații verificate și Baseline B (#31);
+   - C – versiuni și indicii gradate (#32).
+3. **Comun:** setul de probleme, câte o treime de persoană (#33); integrarea prin FeedbackStrategy (#34); evaluarea automată (#35); studiul cu utilizatori (#36); livrabilele (#37).
+
+Un issue per pas, un branch și un PR per issue, fără push direct pe `main`; PR-ul închide issue-ul cu `Closes #n`.
+
+## 14. Întrebări deschise
 
 - Confirmare cu profesorul: interpretăm „modificarea de cod” ca diferența dintre versiuni succesive ale aceluiași student.
 - SDK-ul pentru LLM: SDK-ul oficial Anthropic pentru Java sau Spring AI.
 - Biblioteca de componente: shadcn/ui sau MUI.
+- Cine sunt A, B și C (username-urile GitHub ale membrilor).
