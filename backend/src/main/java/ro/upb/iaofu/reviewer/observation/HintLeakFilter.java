@@ -25,9 +25,14 @@ public final class HintLeakFilter {
 
     /** Forbidden terms found in the checked levels of the hints; empty when the hints are clean. */
     public static List<String> leakedTerms(List<String> hints, List<Problem.ForbiddenTerm> terms, String code) {
+        return leakedTermsIn(hints.subList(0, Math.min(CHECKED_LEVELS, hints.size())), terms, code);
+    }
+
+    /** Forbidden terms found in any of the texts (e.g. the risk, which is shown together with level 1). */
+    public static List<String> leakedTermsIn(List<String> texts, List<Problem.ForbiddenTerm> terms, String code) {
         List<String> leaked = new ArrayList<>();
-        for (int level = 0; level < Math.min(CHECKED_LEVELS, hints.size()); level++) {
-            String text = normalize(hints.get(level));
+        for (String raw : texts) {
+            String text = normalize(raw);
             for (Problem.ForbiddenTerm term : terms) {
                 if (!allowed(term, code) && containsWord(text, normalize(term.term())) && !leaked.contains(term.term())) {
                     leaked.add(term.term());

@@ -203,7 +203,7 @@ O observație e o ipoteză a LLM-ului despre o problemă din cod. Ajunge la stud
 
 - `correctness` și `edge_case`: inputul trebuie să treacă `is_valid` (altfel `invalid_input`). Apoi se rulează codul studentului și referința pe input. Observația e confirmată dacă rezultatele normalizate diferă sau dacă studentul dă eroare ori timeout. Altfel e `same_output`.
 - `efficiency`: confirmată doar dacă `TestReport.efficiency == "too_slow"`; altfel `not_slow`. Dovada afișată e timpul măsurat („pe n = 10 000 depășește 1 s”).
-- După verificare, filtrul anti-scurgere verifică nivelurile 1 și 2. O observație care încă scurge după 2 regenerări e `rejected` cu `leak`.
+- După verificare, filtrul anti-scurgere verifică riscul (afișat împreună cu nivelul 1) și nivelurile 1 și 2. Dacă găsește termeni interziși, cere modelului să rescrie cele trei texte, de cel mult 2 ori. O observație care încă scurge după asta e `rejected` cu `leak`; `leak_retries` arată câte rescrieri au fost necesare.
 - Două observații confirmate pe aceeași linie și de același tip: a doua e `duplicate`.
 
 Studentul vede cel mult 3 observații confirmate. Observațiile eliminate se salvează în jurnal, dar nu se trimit la frontend.
@@ -235,7 +235,7 @@ Generatorul de observații cere modelului JSON cu schema de mai jos, prin ieșir
     {
       "type": "edge_case",
       "line": 4,
-      "evidenceInput": { "nums": [3, 2, 4], "target": 6 },
+      "evidenceInputJson": "{\"nums\": [3, 2, 4], \"target\": 6}",
       "risk": "…",
       "hints": ["nivel 1", "nivel 2", "nivel 3"]
     }
@@ -244,7 +244,10 @@ Generatorul de observații cere modelului JSON cu schema de mai jos, prin ieșir
 ```
 
 - Cel mult 3 observații. `hints` are exact 3 elemente, iar `type` e unul dintre cele trei tipuri.
-- La `efficiency`, `evidenceInput` e `null`.
+- Inputul-dovadă vine ca șir JSON (`evidenceInputJson`), pentru că ieșirea structurată cere o schemă fixă, iar parametrii diferă de la o problemă la alta. Parserul acceptă și forma `evidenceInput` (obiect), folosită în fixtures. Un șir care nu e un obiect JSON cu exact parametrii funcției duce la `invalid_input`.
+- La `efficiency`, `evidenceInputJson` e șirul gol.
+- Promptul de sistem e în `backend/src/main/resources/prompts/observations-system.md`, iar mesajul cu contextul e construit de `ObservationPrompt`.
+- Modelul implicit e `claude-haiku-5-5`, cu thinking adaptiv la effort `low`. Baseline B folosește aceleași setări.
 - Exemple: [`fixtures/llm/observations-valid.json`](../fixtures/llm/observations-valid.json) și [`fixtures/llm/observations-invalid.json`](../fixtures/llm/observations-invalid.json).
 
 **Baseline B** trimite același model cu enunțul și codul, sub întrebarea „ce e greșit aici?”. Fără teste, diff, verificare sau niveluri. Răspunsul e text liber (Markdown), afișat ca atare.
