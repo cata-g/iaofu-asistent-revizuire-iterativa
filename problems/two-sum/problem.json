@@ -40,7 +40,7 @@
     { "term": "tabel de dispersie" },
     { "term": "set", "allowedIfCode": "set\\(" },
     { "term": "mulțime", "allowedIfCode": "set\\(" },
-    { "term": "complement" },
+    { "term": "complement", "allowedIfCode": "target\\s*-" },
     { "term": "o singură parcurgere" }
   ],
   "tests": [

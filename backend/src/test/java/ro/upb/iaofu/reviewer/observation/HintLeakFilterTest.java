@@ -35,13 +35,15 @@ class HintLeakFilterTest {
     void matchingIgnoresDiacriticsAndCase() {
         assertThat(HintLeakFilter.leakedTerms(List.of("Un DICTIONAR ar ajuta.", "x"), terms, v1))
                 .contains("dicționar", "dictionar");
-        assertThat(HintLeakFilter.leakedTerms(List.of("Caută complement-ul.", "x"), terms, v2))
+        assertThat(HintLeakFilter.leakedTerms(List.of("Caută complement-ul.", "x"), terms, v1))
                 .containsExactly("complement");
+        // v2 already computes target - x, so naming the complement reveals nothing new
+        assertThat(HintLeakFilter.leakedTerms(List.of("Caută complementul.", "x"), terms, v2)).isEmpty();
     }
 
     @Test
     void longTermsCatchRomanianInflections() {
-        assertThat(HintLeakFilter.leakedTerms(List.of("Caută COMPLEMENTUL.", "x"), terms, v2))
+        assertThat(HintLeakFilter.leakedTerms(List.of("Caută COMPLEMENTUL.", "x"), terms, v1))
                 .containsExactly("complement");
         assertThat(HintLeakFilter.leakedTerms(List.of("Pune valorile în dicționarul tău.", "x"), terms, v1))
                 .contains("dicționar");
