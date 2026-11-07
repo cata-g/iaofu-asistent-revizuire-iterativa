@@ -1,0 +1,11 @@
+{
+  "observations": [
+    {
+      "type": "bug",
+      "line": "patru",
+      "evidenceInput": "[3, 2, 4]",
+      "risk": "Folosește același element de două ori.",
+      "hints": ["Uită-te la ordinea operațiilor."]
+    }
+  ]
+}
