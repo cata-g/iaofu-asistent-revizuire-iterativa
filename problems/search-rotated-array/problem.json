@@ -1,0 +1,53 @@
+{
+  "id": "search-rotated-array",
+  "title": "Căutare într-un vector rotit",
+  "category": "binary-search",
+  "difficulty": "medium",
+  "statement": "Vectorul `nums` conține numere întregi distincte. Inițial era ordonat crescător, dar a fost rotit la o poziție necunoscută: o parte de la început a fost mutată, în aceeași ordine, la final. De exemplu, `[1, 2, 4, 5, 7, 8]` poate deveni `[5, 7, 8, 1, 2, 4]`. Este posibil ca vectorul să nu fi fost rotit deloc.\n\nReturnează indicele la care se află `target` în `nums` sau `-1` dacă valoarea nu apare. Încearcă o soluție care nu verifică pe rând fiecare element.",
+  "examples": [
+    { "input": { "nums": [5, 7, 8, 1, 2, 4], "target": 2 }, "output": 4, "explanation": "nums[4] = 2." },
+    { "input": { "nums": [5, 7, 8, 1, 2, 4], "target": 6 }, "output": -1 }
+  ],
+  "signature": {
+    "function": "search",
+    "params": [{ "name": "nums", "type": "list[int]" }, { "name": "target", "type": "int" }],
+    "returns": "int"
+  },
+  "constraints": [
+    "1 ≤ len(nums) ≤ 10⁵",
+    "-10⁹ ≤ nums[i], target ≤ 10⁹",
+    "Valorile din nums sunt distincte.",
+    "nums este un vector ordonat crescător, rotit la o poziție oarecare (eventual nerotit)."
+  ],
+  "timeLimitMs": 1000,
+  "comparator": "exact",
+  "forbiddenTerms": [
+    { "term": "căutare binară" },
+    { "term": "binary search" },
+    { "term": "binar" },
+    { "term": "bisect" },
+    { "term": "jumătate", "allowedIfCode": "//\\s*2" },
+    { "term": "înjumătățește" },
+    { "term": "mijloc", "allowedIfCode": "mid" },
+    { "term": "pivot" },
+    { "term": "punctul de rotație" },
+    { "term": "partea ordonată" },
+    { "term": "partea sortată" },
+    { "term": "logaritm" }
+  ],
+  "tests": [
+    { "id": "basic-example", "group": "basic", "input": { "nums": [5, 7, 8, 1, 2, 4], "target": 2 }, "expected": 4 },
+    { "id": "basic-absent", "group": "basic", "input": { "nums": [5, 7, 8, 1, 2, 4], "target": 6 }, "expected": -1 },
+    { "id": "basic-left-part", "group": "basic", "input": { "nums": [15, 18, 22, 2, 3, 6, 12], "target": 18 }, "expected": 1 },
+    { "id": "basic-right-part", "group": "basic", "input": { "nums": [30, 40, 50, 10, 20], "target": 20 }, "expected": 4 },
+    { "id": "basic-target-first", "group": "basic", "input": { "nums": [4, 5, 6, 7, 0, 1, 2], "target": 4 }, "expected": 0 },
+    { "id": "edge-no-rotation", "group": "edge", "input": { "nums": [1, 2, 3, 4, 5, 6], "target": 5 }, "expected": 4 },
+    { "id": "edge-single-found", "group": "edge", "input": { "nums": [5], "target": 5 }, "expected": 0 },
+    { "id": "edge-single-missing", "group": "edge", "input": { "nums": [5], "target": 3 }, "expected": -1 },
+    { "id": "edge-two-rotated", "group": "edge", "input": { "nums": [3, 1], "target": 1 }, "expected": 1 },
+    { "id": "edge-smallest-last", "group": "edge", "input": { "nums": [2, 3, 4, 5, 1], "target": 1 }, "expected": 4 },
+    { "id": "edge-target-last", "group": "edge", "input": { "nums": [6, 7, 1, 2, 3], "target": 3 }, "expected": 4 },
+    { "id": "edge-negative", "group": "edge", "input": { "nums": [-2, 0, 5, -10, -7], "target": -7 }, "expected": 4 }
+  ],
+  "large": { "sizes": [100, 1000, 10000, 100000], "seed": 67 }
+}

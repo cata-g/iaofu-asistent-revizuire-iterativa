@@ -1,0 +1,49 @@
+{
+  "id": "min-eating-speed",
+  "title": "Viteza minimă de mâncat",
+  "category": "binary-search",
+  "difficulty": "medium",
+  "statement": "O maimuță are în față mai multe grămezi de banane; grămada `i` are `piles[i]` banane. Ea alege o viteză întreagă `k` (banane pe oră) și mănâncă astfel: în fiecare oră alege o singură grămadă și mănâncă din ea cel mult `k` banane. Dacă grămada are mai puțin de `k` banane, o termină și nu mai mănâncă nimic până la sfârșitul acelei ore.\n\nAstfel, o grămadă cu `p` banane îi ia `⌈p / k⌉` ore. Returnează cea mai mică viteză `k` pentru care maimuța termină toate grămezile în cel mult `h` ore.",
+  "examples": [
+    { "input": { "piles": [3, 6, 7, 11], "h": 8 }, "output": 4, "explanation": "Cu k = 4 îi trebuie 1 + 2 + 2 + 3 = 8 ore. Cu k = 3 i-ar trebui 1 + 2 + 3 + 4 = 10 ore, prea mult." },
+    { "input": { "piles": [8, 3, 5], "h": 3 }, "output": 8, "explanation": "Are câte o oră pentru fiecare grămadă, deci trebuie să termine și grămada cea mai mare într-o oră." }
+  ],
+  "signature": {
+    "function": "min_eating_speed",
+    "params": [{ "name": "piles", "type": "list[int]" }, { "name": "h", "type": "int" }],
+    "returns": "int"
+  },
+  "constraints": [
+    "1 ≤ len(piles) ≤ 10⁵",
+    "1 ≤ piles[i] ≤ 10⁹",
+    "len(piles) ≤ h ≤ 10⁹"
+  ],
+  "timeLimitMs": 1000,
+  "comparator": "exact",
+  "forbiddenTerms": [
+    { "term": "căutare binară" },
+    { "term": "binary search" },
+    { "term": "binar" },
+    { "term": "bisect" },
+    { "term": "jumătate", "allowedIfCode": "//\\s*2" },
+    { "term": "înjumătățește" },
+    { "term": "mijloc", "allowedIfCode": "mid|\\(\\s*lo\\s*\\+\\s*hi\\s*\\)" },
+    { "term": "monoton" },
+    { "term": "căutare pe răspuns" },
+    { "term": "logaritm" }
+  ],
+  "tests": [
+    { "id": "basic-example", "group": "basic", "input": { "piles": [3, 6, 7, 11], "h": 8 }, "expected": 4 },
+    { "id": "basic-few-hours", "group": "basic", "input": { "piles": [25, 10, 18, 4], "h": 6 }, "expected": 13 },
+    { "id": "basic-mixed", "group": "basic", "input": { "piles": [9, 2, 14, 7, 5], "h": 10 }, "expected": 5 },
+    { "id": "basic-more-time", "group": "basic", "input": { "piles": [12, 7, 9], "h": 12 }, "expected": 3 },
+    { "id": "basic-repeated", "group": "basic", "input": { "piles": [6, 6, 6, 6], "h": 9 }, "expected": 3 },
+    { "id": "edge-h-equals-piles", "group": "edge", "input": { "piles": [8, 3, 5], "h": 3 }, "expected": 8 },
+    { "id": "edge-single-one-hour", "group": "edge", "input": { "piles": [6], "h": 1 }, "expected": 6 },
+    { "id": "edge-all-ones", "group": "edge", "input": { "piles": [1, 1, 1], "h": 3 }, "expected": 1 },
+    { "id": "edge-huge-h", "group": "edge", "input": { "piles": [5, 9, 2], "h": 1000000000 }, "expected": 1 },
+    { "id": "edge-big-pile", "group": "edge", "input": { "piles": [1000000000], "h": 1000000000 }, "expected": 1 },
+    { "id": "edge-big-piles", "group": "edge", "input": { "piles": [1000000000, 999999999], "h": 1000000000 }, "expected": 2 }
+  ],
+  "large": { "sizes": [100, 1000, 10000, 100000], "seed": 79 }
+}

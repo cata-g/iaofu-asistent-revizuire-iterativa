@@ -33,7 +33,7 @@ Un student rezolvă o problemă de algoritmică în mai multe versiuni; la fieca
 | Termenul „versiuni”, nu „tranziții” | Decizie de vocabular: `VersionClassifier`, „clasificatorul de versiuni” |
 | Muncă pe **felii verticale**, nu pe straturi | Fiecare membru face puțin din toate și poate lucra asincron |
 
-## 4. Starea proiectului (7 noiembrie 2026, seara)
+## 4. Starea proiectului (27 noiembrie 2026)
 
 Prototipul merge cap-coadă: `docker compose up --build` pornește toată aplicația cu cele trei variante.
 
@@ -43,7 +43,7 @@ Prototipul merge cap-coadă: `docker compose up --build` pornește toată aplica
 | #30 Execuție și Baseline A | gata (PR #39) |
 | #32 Versiuni și indicii gradate | gata (PR #40) |
 | #31 Observații verificate și Baseline B | gata (PR #41) |
-| #33 Setul de probleme | 5 probleme de **reglare**, cu lanțuri (PR #42). **Setul de test îl scrie echipa** (vezi mai jos). |
+| #33 Setul de probleme | 20 de probleme, toate cu lanțuri de 3 versiuni: 5 de **reglare** (PR #42) și 15 de **test**, câte 2-3 pe fiecare din cele 7 categorii. Toate trec `check_problem.py`. |
 | #34 Integrare | gata (PR #43) |
 | #35 Evaluarea | runner-ul și metricile sunt gata; notebook-ul și analiza erorilor rămân de făcut |
 | #36, #37 | de făcut |
@@ -57,7 +57,9 @@ Decizii luate în implementare (de revizuit):
 - LLM-ul **nu e apelat** când toate testele trec, în nicio variantă.
 - Clasificarea se salvează pentru toate variantele (pentru analiză), dar se afișează doar în `proposed`.
 
-De ce setul de test îl scrie echipa: lanțurile și observațiile de referință din setul de reglare le-a scris Claude. Dacă și setul de test ar fi scris tot de Claude, evaluarea unui sistem bazat pe Claude ar fi circulară.
+Proveniența problemelor: toate cele 20 de probleme, lanțurile și observațiile de referință au fost scrise de Claude, la cererea echipei (decizia din 27 noiembrie 2026). Sunt probleme clasice, de tip LeetCode, dar cu enunțurile scrise de noi și cu testele generate de noi; niciun text nu e copiat. **Limită de menționat în raport:** sistemul evaluat folosește tot un model Claude, deci evaluarea pe setul de test poate fi favorabilă sistemului (date și model din aceeași familie). Atenuare: setul de test nu a fost folosit la reglarea promptului.
+
+Pentru demo: [`docs/demo-checklist.md`](docs/demo-checklist.md) e lista de verificare a aplicației, cu bugurile găsite în testarea din browser.
 
 Rezultatul pe setul de reglare (15 versiuni): precizie 0,81, recall 0,80, acuratețea clasificării 1,0. Cu `correctness` și `edge_case` considerate același tip, precizia și recall-ul ajung la 1,0. Baseline B a dat cod în 15 din 15 răspunsuri. **Nu sunt cifre pentru raport**: setul de reglare a fost scris odată cu promptul.
 

@@ -1,0 +1,49 @@
+{
+  "id": "shortest-path-grid",
+  "title": "Drumul cel mai scurt pe grilă",
+  "category": "graphs",
+  "difficulty": "medium",
+  "statement": "Se dă o hartă dreptunghiulară `grid`, ca listă de șiruri de caractere de aceeași lungime. Fiecare caracter este o celulă: `.` înseamnă liber, iar `#` înseamnă zid.\n\nPornești din colțul din stânga sus (`grid[0][0]`) și vrei să ajungi în colțul din dreapta jos. La fiecare pas te muți într-o celulă liberă vecină: sus, jos, stânga sau dreapta (nu pe diagonală) și fără să ieși de pe hartă.\n\nReturnează numărul minim de pași până la colțul din dreapta jos. Dacă nu se poate ajunge acolo sau dacă unul dintre cele două colțuri este zid, returnează `-1`. Când harta are o singură celulă liberă, răspunsul este `0`.",
+  "examples": [
+    {"input": {"grid": ["..#", "#..", "#.."]}, "output": 4, "explanation": "Harta, rând cu rând: `..#` / `#..` / `#..`. Un drum minim: dreapta, jos, jos, dreapta."},
+    {"input": {"grid": [".#", "#."]}, "output": -1, "explanation": "Din colțul de start ambele celule vecine sunt ziduri."}
+  ],
+  "signature": {"function": "shortest_path", "params": [{"name": "grid", "type": "list[str]"}], "returns": "int"},
+  "constraints": [
+    "1 ≤ len(grid) și 1 ≤ len(grid[0])",
+    "toate rândurile au aceeași lungime",
+    "len(grid) · len(grid[0]) ≤ 10⁵",
+    "grid[i][j] este `.` sau `#`"
+  ],
+  "timeLimitMs": 1000,
+  "comparator": "exact",
+  "forbiddenTerms": [
+    {"term": "BFS"},
+    {"term": "breadth"},
+    {"term": "lățime"},
+    {"term": "coadă", "allowedIfCode": "deque|Queue|popleft"},
+    {"term": "queue", "allowedIfCode": "deque|Queue|popleft"},
+    {"term": "deque", "allowedIfCode": "deque"},
+    {"term": "pe niveluri"},
+    {"term": "nivel cu nivel"},
+    {"term": "Dijkstra"},
+    {"term": "FIFO"}
+  ],
+  "tests": [
+    {"id": "basic-example", "group": "basic", "input": {"grid": ["..#", "#..", "#.."]}, "expected": 4},
+    {"id": "basic-open", "group": "basic", "input": {"grid": ["....", "....", "...."]}, "expected": 5},
+    {"id": "basic-detour", "group": "basic", "input": {"grid": [".....", "####.", ".....", ".####", "....."]}, "expected": 16},
+    {"id": "basic-loop", "group": "basic", "input": {"grid": ["...#.", ".#.#.", "...#.", ".###.", "....."]}, "expected": 8},
+    {"id": "basic-wall-pocket", "group": "basic", "input": {"grid": ["....", "...#", "#..#", "....", "...."]}, "expected": 7},
+    {"id": "basic-unreachable", "group": "basic", "input": {"grid": ["..#..", "..#..", "###..", "....."]}, "expected": -1},
+    {"id": "basic-rooms", "group": "basic", "input": {"grid": ["...#....", ".#.#.##.", ".#...#..", ".####.#.", "......#."]}, "expected": 15},
+    {"id": "edge-single-cell", "group": "edge", "input": {"grid": ["."]}, "expected": 0},
+    {"id": "edge-single-wall", "group": "edge", "input": {"grid": ["#"]}, "expected": -1},
+    {"id": "edge-start-wall", "group": "edge", "input": {"grid": ["#..", "...", "..."]}, "expected": -1},
+    {"id": "edge-end-wall", "group": "edge", "input": {"grid": ["...", "...", "..#"]}, "expected": -1},
+    {"id": "edge-single-row", "group": "edge", "input": {"grid": ["......"]}, "expected": 5},
+    {"id": "edge-single-column", "group": "edge", "input": {"grid": [".", ".", ".", "."]}, "expected": 3},
+    {"id": "edge-blocked-row", "group": "edge", "input": {"grid": ["....#."]}, "expected": -1}
+  ],
+  "large": {"sizes": [100, 1000, 10000, 100000], "seed": 41}
+}

@@ -1,0 +1,71 @@
+{
+  "problemId": "container-most-water",
+  "versions": [
+    {
+      "version": 1,
+      "file": "v1.py",
+      "description": "Încearcă toate perechile de linii: corectă, dar O(n²).",
+      "expectedFailures": [
+        "large-10000",
+        "large-100000"
+      ],
+      "referenceObservations": [
+        {
+          "type": "efficiency",
+          "lines": [
+            3,
+            4
+          ],
+          "severity": "medium",
+          "description": "Verifică toate perechile, deci O(n²); depășește timpul de la n = 10⁴."
+        }
+      ]
+    },
+    {
+      "version": 2,
+      "file": "v2.py",
+      "description": "Pornește de la capete, dar mută linia mai înaltă în loc de cea mai joasă.",
+      "expectedFailures": [
+        "basic-example",
+        "basic-increasing",
+        "basic-decreasing",
+        "basic-tall-inside",
+        "edge-adjacent-best",
+        "large-100",
+        "large-1000",
+        "large-10000",
+        "large-100000"
+      ],
+      "referenceObservations": [
+        {
+          "type": "correctness",
+          "lines": [
+            6,
+            7
+          ],
+          "severity": "high",
+          "description": "Mutând linia mai înaltă, aria rămâne limitată de linia joasă și perechea optimă e sărită: [2, 7, 3, 6, 4, 8, 1] dă 6 în loc de 28."
+        }
+      ]
+    },
+    {
+      "version": 3,
+      "file": "v3.py",
+      "description": "Mută linia corectă, dar bucla se oprește când liniile ajung vecine.",
+      "expectedFailures": [
+        "edge-two",
+        "edge-adjacent-best"
+      ],
+      "referenceObservations": [
+        {
+          "type": "edge_case",
+          "lines": [
+            4
+          ],
+          "severity": "medium",
+          "description": "Condiția left < right - 1 nu evaluează nicio pereche de linii vecine: [3, 5] dă 0 în loc de 3."
+        }
+      ]
+    }
+  ]
+}

@@ -5,8 +5,8 @@ import tools.jackson.databind.JsonNode;
 
 /**
  * Raw output of harness.py (docs/contracte.md section 2.1). Which fields are set
- * depends on the mode: evaluate sets tests and timings, single sets actual,
- * validate sets valid.
+ * depends on the mode: evaluate sets tests and timings, single sets actual and digest
+ * (the answer normalized by the comparator), validate sets valid.
  */
 public record HarnessResult(
         String status,
@@ -15,7 +15,8 @@ public record HarnessResult(
         List<RawTiming> timings,
         JsonNode actual,
         Double timeMs,
-        Boolean valid) {
+        Boolean valid,
+        String digest) {
 
     public static final String OK = "ok";
     public static final String COMPILE_ERROR = "compile_error";
@@ -29,7 +30,7 @@ public record HarnessResult(
     }
 
     static HarnessResult crashed(String error) {
-        return new HarnessResult(CRASHED, error, List.of(), List.of(), null, null, null);
+        return new HarnessResult(CRASHED, error, List.of(), List.of(), null, null, null, null);
     }
 
     public boolean ok() {

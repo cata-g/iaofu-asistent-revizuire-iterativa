@@ -1,0 +1,47 @@
+{
+  "problemId": "max-subarray-sum",
+  "versions": [
+    {
+      "version": 1,
+      "file": "v1.py",
+      "description": "Corectă: încearcă toate subsecvențele, cu suma ținută pe parcurs, deci O(n²).",
+      "expectedFailures": ["large-10000", "large-100000"],
+      "referenceObservations": [
+        {
+          "type": "efficiency",
+          "lines": [3, 5],
+          "severity": "medium",
+          "description": "Cele două bucle parcurg toate perechile (început, sfârșit), adică aproximativ n²/2 sume; depășește timpul de la n = 10⁴."
+        }
+      ]
+    },
+    {
+      "version": 2,
+      "file": "v2.py",
+      "description": "Liniară, dar pornește maximul de la 0 și golește suma când devine negativă, ca și cum subsecvența vidă ar fi permisă.",
+      "expectedFailures": ["edge-single-negative", "edge-all-negative"],
+      "referenceObservations": [
+        {
+          "type": "edge_case",
+          "lines": [2, 6, 7],
+          "severity": "medium",
+          "description": "Când toate numerele sunt negative, `best` rămâne 0, adică suma unei subsecvențe vide; `[-3, -1, -4, -6]` dă 0 în loc de -1."
+        }
+      ]
+    },
+    {
+      "version": 3,
+      "file": "v3.py",
+      "description": "Folosește sumele de la începutul vectorului, dar scade minimul din maxim fără să ceară ca minimul să apară înaintea maximului.",
+      "expectedFailures": ["basic-dip-in-middle", "basic-max-before-min", "edge-single-negative", "edge-all-negative", "edge-zeros-and-negatives", "large-100", "large-1000", "large-10000", "large-100000"],
+      "referenceObservations": [
+        {
+          "type": "correctness",
+          "lines": [5],
+          "severity": "high",
+          "description": "Diferența max − min corespunde unei subsecvențe doar dacă minimul vine înaintea maximului; pe `[5, -10, 3]` dă 10 (5 − (−5)) în loc de 5, iar pe vectori numai cu negative dă un rezultat pozitiv."
+        }
+      ]
+    }
+  ]
+}

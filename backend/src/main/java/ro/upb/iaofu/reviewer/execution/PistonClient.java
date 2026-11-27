@@ -32,7 +32,7 @@ public class PistonClient {
     }
 
     record ExecuteRequest(String language, String version, List<File> files, String stdin,
-                          long run_timeout, long run_memory_limit) {
+                          long run_timeout, long run_cpu_time, long run_memory_limit) {
     }
 
     public record Run(String stdout, String stderr, Integer code, String signal, String status, String message) {
@@ -41,11 +41,15 @@ public class PistonClient {
     record ExecuteResponse(Run run, String message) {
     }
 
-    /** Runs the first file as the entry point; stdin is passed as-is. */
+    /**
+     * Runs the first file as the entry point; stdin is passed as-is. The CPU limit equals the
+     * wall-clock one: Piston's default (3 s) would kill a run where several tests loop forever.
+     */
     public Run execute(List<File> files, String stdin, long timeoutMs) {
         try {
             ExecuteResponse response = http.post().uri("/api/v2/execute")
-                    .body(new ExecuteRequest(LANGUAGE, VERSION, files, stdin, timeoutMs, MEMORY_LIMIT_BYTES))
+                    .body(new ExecuteRequest(LANGUAGE, VERSION, files, stdin, timeoutMs, timeoutMs,
+                            MEMORY_LIMIT_BYTES))
                     .retrieve()
                     .body(ExecuteResponse.class);
             if (response == null || response.run() == null) {

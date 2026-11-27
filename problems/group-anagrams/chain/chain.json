@@ -1,0 +1,72 @@
+{
+  "problemId": "group-anagrams",
+  "versions": [
+    {
+      "version": 1,
+      "file": "v1.py",
+      "description": "Compară fiecare cuvânt cu primul cuvânt din fiecare grup existent: corectă, dar O(n · grupuri).",
+      "expectedFailures": [
+        "large-10000",
+        "large-100000"
+      ],
+      "referenceObservations": [
+        {
+          "type": "efficiency",
+          "lines": [
+            5,
+            6
+          ],
+          "severity": "medium",
+          "description": "Pentru fiecare cuvânt parcurge toate grupurile și ordonează din nou literele ambelor cuvinte; cu multe grupuri devine pătratică și depășește timpul de la n = 10⁴."
+        }
+      ]
+    },
+    {
+      "version": 2,
+      "file": "v2.py",
+      "description": "Grupează după mulțimea literelor, care ignoră de câte ori apare fiecare literă.",
+      "expectedFailures": [
+        "basic-repeated-letters",
+        "edge-same-letter-counts",
+        "large-1000",
+        "large-10000",
+        "large-100000"
+      ],
+      "referenceObservations": [
+        {
+          "type": "correctness",
+          "lines": [
+            4
+          ],
+          "severity": "high",
+          "description": "frozenset(s) pierde numărul de apariții: „aab” și „abb” ajung în același grup."
+        }
+      ]
+    },
+    {
+      "version": 3,
+      "file": "v3.py",
+      "description": "Numără literele corect, dar păstrează cuvintele dintr-un grup într-o mulțime, deci pierde duplicatele.",
+      "expectedFailures": [
+        "edge-two-empty",
+        "edge-duplicates",
+        "edge-same-letter-counts",
+        "large-100",
+        "large-1000",
+        "large-10000",
+        "large-100000"
+      ],
+      "referenceObservations": [
+        {
+          "type": "edge_case",
+          "lines": [
+            9,
+            10
+          ],
+          "severity": "medium",
+          "description": "Un cuvânt care apare de două ori în listă apare o singură dată în grup: [\"ab\", \"ba\", \"ab\"] dă un grup cu două cuvinte în loc de trei."
+        }
+      ]
+    }
+  ]
+}

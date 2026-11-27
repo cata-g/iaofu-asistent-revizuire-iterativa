@@ -1,0 +1,47 @@
+{
+  "id": "coin-change",
+  "title": "Restul cu cele mai puține monede",
+  "category": "dp",
+  "difficulty": "medium",
+  "statement": "Ai la dispoziție monede cu valorile din lista `coins`, din fiecare valoare câte monede vrei. Vrei să plătești exact suma `amount`.\n\nReturnează numărul minim de monede a căror valoare totală este exact `amount`. Dacă suma nu poate fi formată, returnează `-1`. Pentru `amount = 0` răspunsul este `0` (nu folosești nicio monedă).",
+  "examples": [
+    {"input": {"coins": [1, 4, 6], "amount": 8}, "output": 2, "explanation": "8 = 4 + 4. Dacă iei întâi moneda cea mai mare, ajungi la 6 + 1 + 1, adică 3 monede."},
+    {"input": {"coins": [4, 6], "amount": 9}, "output": -1, "explanation": "Orice combinație de monede de 4 și 6 dă o sumă pară."}
+  ],
+  "signature": {"function": "coin_change", "params": [{"name": "coins", "type": "list[int]"}, {"name": "amount", "type": "int"}], "returns": "int"},
+  "constraints": [
+    "1 ≤ len(coins) ≤ 12",
+    "1 ≤ coins[i] ≤ 10⁴, valori distincte",
+    "0 ≤ amount ≤ 10⁵"
+  ],
+  "timeLimitMs": 1500,
+  "comparator": "exact",
+  "forbiddenTerms": [
+    {"term": "programare dinamică"},
+    {"term": "dinamic"},
+    {"term": "dp", "allowedIfCode": "\bdp\b"},
+    {"term": "memoizare", "allowedIfCode": "cache|memo"},
+    {"term": "memoization", "allowedIfCode": "cache|memo"},
+    {"term": "memo", "allowedIfCode": "cache|memo"},
+    {"term": "cache", "allowedIfCode": "cache|memo"},
+    {"term": "lru_cache", "allowedIfCode": "lru_cache"},
+    {"term": "tabel"},
+    {"term": "bottom-up"},
+    {"term": "subproblem"}
+  ],
+  "tests": [
+    {"id": "basic-example", "group": "basic", "input": {"coins": [1, 4, 6], "amount": 8}, "expected": 2},
+    {"id": "basic-standard", "group": "basic", "input": {"coins": [1, 2, 5], "amount": 11}, "expected": 3},
+    {"id": "basic-largest-first-fails", "group": "basic", "input": {"coins": [1, 3, 4], "amount": 6}, "expected": 2},
+    {"id": "basic-largest-first-stuck", "group": "basic", "input": {"coins": [2, 5], "amount": 6}, "expected": 3},
+    {"id": "basic-unsorted-coins", "group": "basic", "input": {"coins": [7, 3, 5], "amount": 13}, "expected": 3},
+    {"id": "basic-two-coins", "group": "basic", "input": {"coins": [3, 7], "amount": 20}, "expected": 4},
+    {"id": "edge-zero-amount", "group": "edge", "input": {"coins": [1, 2], "amount": 0}, "expected": 0},
+    {"id": "edge-impossible-parity", "group": "edge", "input": {"coins": [4, 6], "amount": 9}, "expected": -1},
+    {"id": "edge-coins-too-big", "group": "edge", "input": {"coins": [5, 10], "amount": 3}, "expected": -1},
+    {"id": "edge-single-coin-exact", "group": "edge", "input": {"coins": [7], "amount": 14}, "expected": 2},
+    {"id": "edge-amount-is-a-coin", "group": "edge", "input": {"coins": [2, 9, 3], "amount": 9}, "expected": 1},
+    {"id": "edge-single-coin-impossible", "group": "edge", "input": {"coins": [2], "amount": 3}, "expected": -1}
+  ],
+  "large": {"sizes": [100, 1000, 10000, 100000], "seed": 85}
+}

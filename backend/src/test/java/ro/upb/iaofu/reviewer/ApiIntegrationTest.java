@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,6 +19,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import ro.upb.iaofu.reviewer.execution.ExecutionService;
 import ro.upb.iaofu.reviewer.execution.TestReport;
+import ro.upb.iaofu.reviewer.problem.ProblemController;
 import ro.upb.iaofu.reviewer.session.SubmissionRepository;
 import tools.jackson.databind.JsonNode;
 
@@ -41,16 +43,26 @@ class ApiIntegrationTest {
 
     @Test
     void problemListAndDetailHideHiddenData() throws Exception {
-        mvc.perform(get("/api/problems").param("category", "hashing"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value("two-sum"));
-        mvc.perform(get("/api/problems").param("difficulty", "medium").param("category", "stack"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(0));
+        String hashing = mvc.perform(get("/api/problems").param("category", "hashing"))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        assertThat(body(hashing).valueStream()).allMatch(p -> p.get("category").asString().equals("hashing"))
+                .anyMatch(p -> p.get("id").asString().equals("two-sum"));
+        String easyStack = mvc.perform(get("/api/problems").param("difficulty", "easy").param("category", "stack"))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        assertThat(body(easyStack).valueStream()).isNotEmpty().allMatch(p -> p.get("category").asString()
+                .equals("stack") && p.get("difficulty").asString().equals("easy"));
         String medium = mvc.perform(get("/api/problems").param("difficulty", "medium"))
                 .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
         assertThat(body(medium).valueStream()).isNotEmpty()
                 .allMatch(p -> p.get("difficulty").asString().equals("medium"));
+
+        // sorted by the category order of PRD 7.1, then easy before medium
+        String all = mvc.perform(get("/api/problems")).andReturn().getResponse().getContentAsString();
+        List<Integer> order = body(all).valueStream()
+                .map(p -> ProblemController.CATEGORIES.indexOf(p.get("category").asString()) * 2
+                        + ("easy".equals(p.get("difficulty").asString()) ? 0 : 1))
+                .toList();
+        assertThat(order).isSorted();
 
         String detail = mvc.perform(get("/api/problems/two-sum")).andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
@@ -92,6 +104,9 @@ class ApiIntegrationTest {
                 .andExpect(jsonPath("$.versions.length()").value(2))
                 .andExpect(jsonPath("$.versions[1].code").value("v2"))
                 .andExpect(jsonPath("$.versions[1].summary.passed").value(11))
+                // enough to restore the last version after a refresh
+                .andExpect(jsonPath("$.versions[1].report.summary.total").exists())
+                .andExpect(jsonPath("$.versions[1].llmStatus").value("not_used"))
                 // baseline_a never shows the classification
                 .andExpect(jsonPath("$.versions[1].classification").doesNotExist());
 

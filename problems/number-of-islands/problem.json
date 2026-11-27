@@ -1,0 +1,50 @@
+{
+  "id": "number-of-islands",
+  "title": "Numărul de insule",
+  "category": "graphs",
+  "difficulty": "medium",
+  "statement": "Se dă o hartă dreptunghiulară `grid`, ca listă de șiruri de caractere de aceeași lungime, în care `1` înseamnă uscat și `0` înseamnă apă.\n\nDouă celule de uscat fac parte din aceeași insulă dacă sunt vecine pe orizontală sau pe verticală (vecinii pe diagonală nu contează) sau dacă sunt legate printr-un șir de astfel de vecini. Tot ce se află în afara hărții este apă.\n\nReturnează numărul de insule de pe hartă.",
+  "examples": [
+    {"input": {"grid": ["1100", "1101", "0011", "1000"]}, "output": 3, "explanation": "Harta, rând cu rând: `1100` / `1101` / `0011` / `1000`. Insulele sunt: blocul 2×2 din stânga sus, grupul din dreapta (trei celule) și celula din stânga jos."},
+    {"input": {"grid": ["101", "010"]}, "output": 3, "explanation": "Celulele legate doar pe diagonală formează insule separate."}
+  ],
+  "signature": {"function": "num_islands", "params": [{"name": "grid", "type": "list[str]"}], "returns": "int"},
+  "constraints": [
+    "1 ≤ len(grid) și 1 ≤ len(grid[0])",
+    "toate rândurile au aceeași lungime",
+    "len(grid) · len(grid[0]) ≤ 10⁵",
+    "grid[i][j] este `0` sau `1`"
+  ],
+  "timeLimitMs": 1000,
+  "comparator": "exact",
+  "forbiddenTerms": [
+    {"term": "DFS"},
+    {"term": "BFS"},
+    {"term": "adâncime"},
+    {"term": "lățime"},
+    {"term": "flood"},
+    {"term": "umplere"},
+    {"term": "conex"},
+    {"term": "union-find"},
+    {"term": "union find"},
+    {"term": "stivă", "allowedIfCode": "stack|\\.pop\\(\\)"},
+    {"term": "coadă", "allowedIfCode": "deque|popleft"},
+    {"term": "scufund"}
+  ],
+  "tests": [
+    {"id": "basic-example", "group": "basic", "input": {"grid": ["1100", "1101", "0011", "1000"]}, "expected": 3},
+    {"id": "basic-u-shape", "group": "basic", "input": {"grid": ["10101", "10101", "11111"]}, "expected": 1},
+    {"id": "basic-ring", "group": "basic", "input": {"grid": ["11111", "10001", "10101", "10001", "11111"]}, "expected": 2},
+    {"id": "basic-scattered", "group": "basic", "input": {"grid": ["10010", "00000", "01101", "00100"]}, "expected": 4},
+    {"id": "basic-staircase", "group": "basic", "input": {"grid": ["0011", "0110", "1100", "1001"]}, "expected": 2},
+    {"id": "edge-all-water", "group": "edge", "input": {"grid": ["000", "000"]}, "expected": 0},
+    {"id": "edge-all-land", "group": "edge", "input": {"grid": ["111", "111", "111"]}, "expected": 1},
+    {"id": "edge-single-land", "group": "edge", "input": {"grid": ["1"]}, "expected": 1},
+    {"id": "edge-single-water", "group": "edge", "input": {"grid": ["0"]}, "expected": 0},
+    {"id": "edge-diagonal-only", "group": "edge", "input": {"grid": ["101", "010", "101"]}, "expected": 5},
+    {"id": "edge-opposite-columns", "group": "edge", "input": {"grid": ["1001", "0000", "1001"]}, "expected": 4},
+    {"id": "edge-top-and-bottom", "group": "edge", "input": {"grid": ["010", "000", "010"]}, "expected": 2},
+    {"id": "edge-single-row", "group": "edge", "input": {"grid": ["1101011"]}, "expected": 3}
+  ],
+  "large": {"sizes": [100, 1000, 10000, 100000], "seed": 52}
+}

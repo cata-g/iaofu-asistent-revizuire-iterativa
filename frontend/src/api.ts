@@ -97,6 +97,7 @@ export interface VersionView {
   classification: Classification | null
   observations: ObservationView[]
   assistantMessage: string | null
+  llmStatus: LlmStatus
 }
 
 export interface History {
@@ -115,21 +116,29 @@ export class ApiError extends Error {
   }
 }
 
+// The backend's error texts are for developers (in English); the student sees these.
+const STATUS_MESSAGES: Record<number, string> = {
+  400: 'Cererea nu este validă. Verifică dacă ai scris cod înainte să trimiți.',
+  404: 'Nu am găsit ce ai cerut. Întoarce-te la lista de probleme.',
+  409: 'Acțiunea nu mai este posibilă: problema e marcată ca terminată sau o versiune se rulează deja.',
+  502: 'Serverul nu răspunde. Verifică dacă aplicația rulează.',
+  503: 'Rularea codului nu este disponibilă acum. Încearcă din nou peste câteva secunde.',
+}
+
 async function request<T>(method: string, path: string, body?: unknown): Promise<T> {
-  const res = await fetch(`/api${path}`, {
-    method,
-    headers: body === undefined ? undefined : { 'Content-Type': 'application/json' },
-    body: body === undefined ? undefined : JSON.stringify(body),
-  })
+  let res: Response
+  try {
+    res = await fetch(`/api${path}`, {
+      method,
+      headers: body === undefined ? undefined : { 'Content-Type': 'application/json' },
+      body: body === undefined ? undefined : JSON.stringify(body),
+    })
+  } catch {
+    throw new ApiError(0, 'Serverul nu răspunde. Verifică dacă aplicația rulează.')
+  }
   if (!res.ok) {
-    const text = await res.text()
-    let message = text
-    try {
-      message = (JSON.parse(text) as { error?: string }).error ?? text
-    } catch {
-      // not JSON
-    }
-    throw new ApiError(res.status, message || res.statusText)
+    throw new ApiError(res.status, STATUS_MESSAGES[res.status]
+      ?? `Eroare neașteptată pe server (${res.status}). Încearcă din nou.`)
   }
   return (res.status === 204 ? undefined : await res.json()) as T
 }

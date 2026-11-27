@@ -68,17 +68,30 @@ class ReportBuilderTest {
                 .map(t -> t.n() == 1000 ? new HarnessResult.RawTiming(t.n(), "ok", t.timeMs(), "different", null) : t)
                 .toList();
         TestReport r = ReportBuilder.build(problem, new HarnessResult("ok", null, raw.tests(), tampered, null, null,
-                null), reference);
+                null, null), reference);
 
         assertThat(r.timings()).extracting(TestReport.Timing::status).containsExactly("ok", "wrong", "ok", "ok");
         assertThat(r.failedTests()).extracting(TestReport.TestResult::id).contains("large-1000");
-        assertThat(r.efficiency()).isEqualTo(TestReport.EFFICIENCY_OK);
+        // a wrong answer says nothing about speed
+        assertThat(r.efficiency()).isEqualTo(TestReport.EFFICIENCY_UNKNOWN);
+    }
+
+    @Test
+    void efficiencyIsOkOnlyWhenEveryLargeInputIsRightAndInTime() {
+        TestReport.Timing ok = new TestReport.Timing(100, "ok", 0.1);
+        assertThat(ReportBuilder.efficiency(List.of(ok, new TestReport.Timing(1000, "ok", 1.0))))
+                .isEqualTo(TestReport.EFFICIENCY_OK);
+        assertThat(ReportBuilder.efficiency(List.of(ok, new TestReport.Timing(1000, "timeout", null))))
+                .isEqualTo(TestReport.EFFICIENCY_TOO_SLOW);
+        assertThat(ReportBuilder.efficiency(List.of(ok, new TestReport.Timing(1000, "error", null))))
+                .isEqualTo(TestReport.EFFICIENCY_UNKNOWN);
+        assertThat(ReportBuilder.efficiency(List.of())).isEqualTo(TestReport.EFFICIENCY_UNKNOWN);
     }
 
     @Test
     void compileErrorHasNoTests() {
         TestReport r = ReportBuilder.build(problem,
-                new HarnessResult("compile_error", "line 2: SyntaxError: invalid syntax", null, null, null, null, null),
+                new HarnessResult("compile_error", "line 2: SyntaxError: invalid syntax", null, null, null, null, null, null),
                 reference);
 
         assertThat(r.status()).isEqualTo("compile_error");

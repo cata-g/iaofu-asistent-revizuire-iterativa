@@ -1,0 +1,47 @@
+{
+  "problemId": "min-eating-speed",
+  "versions": [
+    {
+      "version": 1,
+      "file": "v1.py",
+      "description": "Încearcă vitezele pe rând, de la 1 în sus, până găsește una suficientă. Corect, dar costă O(n·k) pentru un răspuns k mare.",
+      "expectedFailures": ["large-10000", "large-100000"],
+      "referenceObservations": [
+        {
+          "type": "efficiency",
+          "lines": [3, 9],
+          "severity": "medium",
+          "description": "Vitezele sunt încercate una câte una, iar fiecare încercare parcurge toate grămezile; când răspunsul e aproape de grămada maximă, se fac aproape n·max(piles) operații."
+        }
+      ]
+    },
+    {
+      "version": 2,
+      "file": "v2.py",
+      "description": "Restrânge corect intervalul de viteze, dar calculează orele cu împărțire întreagă în jos, deci restul unei grămezi nu mai costă o oră.",
+      "expectedFailures": ["basic-example", "basic-few-hours", "basic-mixed", "edge-h-equals-piles", "edge-single-one-hour", "large-100", "large-1000", "large-10000", "large-100000"],
+      "referenceObservations": [
+        {
+          "type": "correctness",
+          "lines": [5],
+          "severity": "high",
+          "description": "p // k subestimează orele (o grămadă de 7 cu k = 4 ia 2 ore, nu 1), deci se acceptă viteze prea mici: [3, 6, 7, 11] cu h = 8 dă 3 în loc de 4."
+        }
+      ]
+    },
+    {
+      "version": 3,
+      "file": "v3.py",
+      "description": "Orele sunt calculate corect, dar limita de sus a vitezelor e max(piles) - 1, deci răspunsul max(piles) nu poate fi returnat.",
+      "expectedFailures": ["edge-h-equals-piles", "edge-single-one-hour"],
+      "referenceObservations": [
+        {
+          "type": "edge_case",
+          "lines": [2],
+          "severity": "medium",
+          "description": "Când h == len(piles), fiecare grămadă trebuie mâncată într-o oră și răspunsul e chiar max(piles), care e exclus: [8, 3, 5] cu h = 3 dă 7 în loc de 8."
+        }
+      ]
+    }
+  ]
+}

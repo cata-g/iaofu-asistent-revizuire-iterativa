@@ -1,0 +1,48 @@
+{
+  "id": "course-order",
+  "title": "Ordinea cursurilor",
+  "category": "graphs",
+  "difficulty": "medium",
+  "statement": "O facultate are `num_courses` cursuri, numerotate de la `0` la `num_courses - 1`. Lista `prerequisites` conține perechi `[a, b]`, cu sensul: cursul `b` trebuie absolvit înainte de cursul `a`.\n\nUn student poate urma un singur curs odată și poate începe un curs doar după ce le-a absolvit pe toate cele cerute înaintea lui. Returnează `True` dacă există o ordine în care pot fi absolvite toate cursurile și `False` altfel.\n\nO pereche nu apare de două ori în listă. Un curs care nu apare în nicio pereche poate fi urmat oricând.",
+  "examples": [
+    {"input": {"num_courses": 3, "prerequisites": [[1, 0], [2, 1]]}, "output": true, "explanation": "Ordinea 0, 1, 2 respectă ambele cerințe."},
+    {"input": {"num_courses": 2, "prerequisites": [[1, 0], [0, 1]]}, "output": false, "explanation": "Cursul 0 cere cursul 1, iar cursul 1 cere cursul 0, deci niciunul nu poate fi început."}
+  ],
+  "signature": {"function": "can_finish", "params": [{"name": "num_courses", "type": "int"}, {"name": "prerequisites", "type": "list[list[int]]"}], "returns": "bool"},
+  "constraints": [
+    "1 ≤ num_courses ≤ 10⁵",
+    "0 ≤ len(prerequisites) ≤ 10⁵",
+    "0 ≤ a, b < num_courses",
+    "perechile sunt distincte"
+  ],
+  "timeLimitMs": 1500,
+  "comparator": "exact",
+  "forbiddenTerms": [
+    {"term": "topologic"},
+    {"term": "grad de intrare"},
+    {"term": "gradul de intrare"},
+    {"term": "indegree"},
+    {"term": "in-degree"},
+    {"term": "Kahn"},
+    {"term": "DFS"},
+    {"term": "BFS"},
+    {"term": "trei culori"},
+    {"term": "coadă", "allowedIfCode": "deque|popleft"},
+    {"term": "pe drumul curent"}
+  ],
+  "tests": [
+    {"id": "basic-example", "group": "basic", "input": {"num_courses": 3, "prerequisites": [[1, 0], [2, 1]]}, "expected": true},
+    {"id": "basic-two-cycle", "group": "basic", "input": {"num_courses": 2, "prerequisites": [[1, 0], [0, 1]]}, "expected": false},
+    {"id": "basic-shared-prerequisite", "group": "basic", "input": {"num_courses": 4, "prerequisites": [[1, 0], [2, 0], [3, 1], [3, 2]]}, "expected": true},
+    {"id": "basic-long-cycle", "group": "basic", "input": {"num_courses": 5, "prerequisites": [[1, 0], [2, 1], [3, 2], [1, 3], [4, 0]]}, "expected": false},
+    {"id": "basic-tree", "group": "basic", "input": {"num_courses": 6, "prerequisites": [[1, 0], [2, 0], [3, 1], [4, 1], [5, 2]]}, "expected": true},
+    {"id": "basic-reverse-ids", "group": "basic", "input": {"num_courses": 4, "prerequisites": [[0, 1], [1, 2], [2, 3]]}, "expected": true},
+    {"id": "edge-no-prerequisites", "group": "edge", "input": {"num_courses": 3, "prerequisites": []}, "expected": true},
+    {"id": "edge-single-course", "group": "edge", "input": {"num_courses": 1, "prerequisites": []}, "expected": true},
+    {"id": "edge-self-loop", "group": "edge", "input": {"num_courses": 2, "prerequisites": [[1, 1]]}, "expected": false},
+    {"id": "edge-isolated-course", "group": "edge", "input": {"num_courses": 4, "prerequisites": [[1, 0], [2, 1]]}, "expected": true},
+    {"id": "edge-cycle-in-second-part", "group": "edge", "input": {"num_courses": 6, "prerequisites": [[1, 0], [2, 1], [4, 3], [5, 4], [3, 5]]}, "expected": false},
+    {"id": "edge-cycle-unreachable-from-zero", "group": "edge", "input": {"num_courses": 5, "prerequisites": [[1, 0], [3, 2], [2, 4], [4, 3]]}, "expected": false}
+  ],
+  "large": {"sizes": [100, 1000, 10000, 100000], "seed": 63}
+}

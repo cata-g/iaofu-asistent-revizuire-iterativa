@@ -1,0 +1,47 @@
+{
+  "problemId": "insert-interval",
+  "versions": [
+    {
+      "version": 1,
+      "file": "v1.py",
+      "description": "Adaugă intervalul nou, ordonează și unește perechile vecine, dar la fiecare unire reconstruiește toată lista prin felii. Corect, dar O(n²) când intervalul nou acoperă multe intervale.",
+      "expectedFailures": ["large-100000"],
+      "referenceObservations": [
+        {
+          "type": "efficiency",
+          "lines": [7],
+          "severity": "medium",
+          "description": "Fiecare unire copiază toată lista (intervals[:i] + ... + intervals[i + 2:]), deci un interval nou care acoperă k intervale costă O(k·n)."
+        }
+      ]
+    },
+    {
+      "version": 2,
+      "file": "v2.py",
+      "description": "O singură parcurgere în trei etape, dar la unire actualizează doar capătul din dreapta, nu și începutul.",
+      "expectedFailures": ["basic-example", "basic-merge-several", "basic-extends-left", "basic-extends-right", "edge-merges-last", "edge-touching-both", "edge-inside", "large-100", "large-1000", "large-10000", "large-100000"],
+      "referenceObservations": [
+        {
+          "type": "correctness",
+          "lines": [8, 9],
+          "severity": "high",
+          "description": "Când primul interval suprapus începe înaintea intervalului nou, rezultatul păstrează începutul intervalului nou: [[1, 3], [6, 9]] cu [2, 5] dă [[2, 5], [6, 9]] în loc de [[1, 5], [6, 9]]."
+        }
+      ]
+    },
+    {
+      "version": 3,
+      "file": "v3.py",
+      "description": "Unirea e corectă, dar intervalul nou e adăugat doar când apare un interval aflat după el, deci se pierde dacă nu mai urmează niciunul.",
+      "expectedFailures": ["edge-empty", "edge-after-all", "edge-merges-last", "edge-touching-both", "edge-covers-all"],
+      "referenceObservations": [
+        {
+          "type": "edge_case",
+          "lines": [9, 10, 16],
+          "severity": "medium",
+          "description": "Dacă intervalul nou (eventual unit) ajunge ultimul, nu e adăugat niciodată: lista goală dă [], iar [[1, 2], [3, 4]] cu [6, 8] pierde [6, 8]."
+        }
+      ]
+    }
+  ]
+}

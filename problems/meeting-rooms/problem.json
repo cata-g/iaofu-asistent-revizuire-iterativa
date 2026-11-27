@@ -1,0 +1,44 @@
+{
+  "id": "meeting-rooms",
+  "title": "Săli de ședință",
+  "category": "sorting",
+  "difficulty": "medium",
+  "statement": "Se dă o listă `intervals` de ședințe. Ședința `[start, end]` ocupă o sală de la momentul `start` până la momentul `end`, fără momentul `end` (adică intervalul `[start, end)`). Returnează numărul minim de săli necesare pentru ca toate ședințele să aibă loc.\n\nO ședință care se termină la momentul `t` și una care începe la momentul `t` pot folosi aceeași sală. Ședințele nu sunt date într-o ordine anume.",
+  "examples": [
+    {"input": {"intervals": [[1, 5], [2, 6], [8, 9]]}, "output": 2, "explanation": "[1, 5] și [2, 6] au loc în același timp, deci au nevoie de săli diferite; [8, 9] poate folosi oricare dintre ele."},
+    {"input": {"intervals": [[1, 3], [3, 5], [5, 7]]}, "output": 1, "explanation": "Fiecare ședință începe exact când se termină cea dinainte, deci ajunge o singură sală."}
+  ],
+  "signature": {"function": "min_meeting_rooms", "params": [{"name": "intervals", "type": "list[list[int]]"}], "returns": "int"},
+  "constraints": [
+    "1 ≤ len(intervals) ≤ 10⁵",
+    "0 ≤ start < end ≤ 10⁹"
+  ],
+  "timeLimitMs": 1000,
+  "comparator": "exact",
+  "forbiddenTerms": [
+    {"term": "sortează", "allowedIfCode": "sort"},
+    {"term": "sortat", "allowedIfCode": "sort"},
+    {"term": "sortare", "allowedIfCode": "sort"},
+    {"term": "sort", "allowedIfCode": "sort"},
+    {"term": "ordonează", "allowedIfCode": "sort"},
+    {"term": "heap", "allowedIfCode": "heapq"},
+    {"term": "priorit", "allowedIfCode": "heapq"},
+    {"term": "evenimente"},
+    {"term": "baleiere"},
+    {"term": "sweep"},
+    {"term": "cel mai devreme"}
+  ],
+  "tests": [
+    {"id": "basic-example", "group": "basic", "input": {"intervals": [[1, 5], [2, 6], [8, 9]]}, "expected": 2},
+    {"id": "basic-no-overlap", "group": "basic", "input": {"intervals": [[1, 2], [4, 5], [7, 8]]}, "expected": 1},
+    {"id": "basic-all-overlap", "group": "basic", "input": {"intervals": [[1, 10], [2, 9], [3, 8]]}, "expected": 3},
+    {"id": "basic-unsorted", "group": "basic", "input": {"intervals": [[7, 10], [2, 4], [3, 8], [1, 5]]}, "expected": 3},
+    {"id": "basic-room-reuse", "group": "basic", "input": {"intervals": [[1, 10], [2, 3], [4, 5], [6, 7]]}, "expected": 2},
+    {"id": "edge-single", "group": "edge", "input": {"intervals": [[0, 1]]}, "expected": 1},
+    {"id": "edge-back-to-back", "group": "edge", "input": {"intervals": [[1, 3], [3, 5], [5, 7]]}, "expected": 1},
+    {"id": "edge-identical", "group": "edge", "input": {"intervals": [[2, 4], [2, 4], [2, 4]]}, "expected": 3},
+    {"id": "edge-pairs", "group": "edge", "input": {"intervals": [[1, 2], [1, 2], [3, 4], [3, 4]]}, "expected": 2},
+    {"id": "edge-nested-touching", "group": "edge", "input": {"intervals": [[1, 100], [2, 3], [3, 4], [4, 5]]}, "expected": 2}
+  ],
+  "large": {"sizes": [100, 1000, 10000, 100000], "seed": 47}
+}

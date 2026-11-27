@@ -108,7 +108,7 @@ Backend-ul trimite la Piston (`POST /api/v2/execute`, Python 3.12.0) trei fișie
 
 Jobul ajunge pe stdin, ca JSON. Rezultatul vine ca o singură linie, prefixată cu `__HARNESS_RESULT__`, așa că un `print` din codul studentului nu-l poate strica.
 
-Fiecare apel al funcției are propria limită de timp, impusă cu `signal.setitimer`. De aceea o buclă infinită pe un test afectează doar acel test (F7). Testele de bază și cazurile limită au 2 s pe test. Inputurile mari au `timeLimitMs` pe apel.
+Fiecare apel al funcției are propria limită de timp, impusă cu `signal.setitimer`. De aceea o buclă infinită pe un test afectează doar acel test (F7). Testele de bază și cazurile limită au 1 s pe test. Inputurile mari au `timeLimitMs` pe apel.
 
 | Mod | Ce face | Folosit de |
 |---|---|---|
@@ -154,7 +154,7 @@ Inputul mare se generează în sandbox, cu `generate(n, random.Random(seed + n))
 | `error` | `"timeout"` sau `"line 4: IndexError: list index out of range"` (linia din `solution.py`) |
 | `timings[].status` | `ok`, `timeout`, `error`, `wrong` (răspuns greșit pe inputul mare), `skipped` |
 | `slope` | panta regresiei pe scară log-log (log₁₀ timp față de log₁₀ n), calculată pe punctele `ok` sau `wrong`; `null` dacă sunt mai puțin de două |
-| `efficiency` | `ok` dacă toate n-urile au terminat; `too_slow` dacă a apărut vreun timeout; `unknown` dacă nu s-a ajuns la inputurile mari (`compile_error`) |
+| `efficiency` | `too_slow` dacă a apărut vreun timeout; `ok` dacă toate n-urile au dat răspunsul corect în limita de timp; altfel `unknown` (răspuns greșit sau eroare pe un input mare, ori `compile_error`) |
 
 Un test `large-<n>` trece dacă `timings[n].status == "ok"` și digest-ul coincide cu cel al referinței. Testele `large` intră în `summary`, iar diferențele de eficiență apar astfel și în clasificare.
 
@@ -202,7 +202,7 @@ O observație e o ipoteză a LLM-ului despre o problemă din cod. Ajunge la stud
 **Verificarea prin contraexemplu (F12):**
 
 - `correctness` și `edge_case`: inputul trebuie să treacă `is_valid` (altfel `invalid_input`). Apoi se rulează codul studentului și referința pe input. Observația e confirmată dacă rezultatele normalizate diferă sau dacă studentul dă eroare ori timeout. Altfel e `same_output`.
-- `efficiency`: confirmată doar dacă `TestReport.efficiency == "too_slow"`; altfel `not_slow`. Dovada afișată e timpul măsurat („pe n = 10 000 depășește 1 s”).
+- `efficiency`: confirmată doar de o măsurătoare pe inputurile mari: un timeout sau o eroare care apare doar la scară (de exemplu `RecursionError`); altfel `not_slow`. Dovada afișată e măsurătoarea („La n = 10 000 depășește limita de 1000 ms.” sau „La n = 10 000 se oprește cu eroare: …”).
 - După verificare, filtrul anti-scurgere verifică riscul (afișat împreună cu nivelul 1) și nivelurile 1 și 2. Dacă găsește termeni interziși, cere modelului să rescrie cele trei texte, de cel mult 2 ori. O observație care încă scurge după asta e `rejected` cu `leak`; `leak_retries` arată câte rescrieri au fost necesare.
 - Două observații confirmate pe aceeași linie și de același tip: a doua e `duplicate`.
 
@@ -256,7 +256,7 @@ Fiecare apel se jurnalizează în `llm_call`, cu tokenii și costul (N4). Un pla
 
 ## 6. API
 
-Toate rutele sunt sub `/api`, cu JSON. Erorile au forma `{ "error": "mesaj" }`, cu statusurile 400 (input invalid), 404 (resursă inexistentă) și 409 (sesiune terminată).
+Toate rutele sunt sub `/api`, cu JSON. Erorile au forma `{ "error": "mesaj" }`, cu statusurile 400 (input invalid), 404 (resursă inexistentă) și 409 (sesiune terminată sau o trimitere a aceleiași sesiuni încă rulează).
 
 ### `GET /api/problems?category=&difficulty=`
 
@@ -352,10 +352,13 @@ Versiunile sesiunii, cu codul lor (F10). Diff-ul vizual îl face Monaco `DiffEdi
   "versions": [
     { "version": 1, "submissionId": "…", "code": "…", "createdAt": "2026-11-07T18:00:00Z",
       "summary": { "passed": 12, "total": 14 }, "efficiency": "too_slow",
-      "classification": null, "observations": [ … ] }
+      "report": { … }, "classification": null, "observations": [ … ],
+      "assistantMessage": null, "llmStatus": "ok" }
   ]
 }
 ```
+
+Fiecare versiune are aceleași date ca răspunsul trimiterii, așa că frontend-ul poate reface ultima versiune după un refresh.
 
 ### `GET /api/export/{table}.csv`
 

@@ -31,7 +31,7 @@ class CounterexampleVerifierTest {
     }
 
     private static HarnessResult single(String actual, String error) {
-        return new HarnessResult("ok", null, null, null, actual == null ? null : node(actual), 0.1, null);
+        return new HarnessResult("ok", null, null, null, actual == null ? null : node(actual), 0.1, null, null);
     }
 
     private static Proposal edge(String input) {
@@ -66,11 +66,25 @@ class CounterexampleVerifierTest {
     }
 
     @Test
+    void sameAnswerUnderTheComparatorRejectsEvenIfOrderDiffers() {
+        when(execution.isValidInput(eq(problem), any())).thenReturn(true);
+        when(execution.runSingle(eq(problem), eq(problem.referenceCode()), any()))
+                .thenReturn(new HarnessResult("ok", null, null, null, node("[0,1]"), 0.1, null, "abc"));
+        when(execution.runSingle(eq(problem), eq(v2), any()))
+                .thenReturn(new HarnessResult("ok", null, null, null, node("[1,0]"), 0.1, null, "abc"));
+
+        CounterexampleVerifier.Verdict v = verifier.verify(problem, v2, reportV2, edge("{\"nums\":[1,2],\"target\":3}"));
+
+        assertThat(v.confirmed()).isFalse();
+        assertThat(v.rejectReason()).isEqualTo(CounterexampleVerifier.SAME_OUTPUT);
+    }
+
+    @Test
     void studentCrashConfirms() {
         when(execution.isValidInput(eq(problem), any())).thenReturn(true);
         when(execution.runSingle(eq(problem), eq(problem.referenceCode()), any())).thenReturn(single("[0,1]", null));
         when(execution.runSingle(eq(problem), eq(v2), any()))
-                .thenReturn(new HarnessResult("ok", "line 3: IndexError: list index out of range", null, null, null, 0.1, null));
+                .thenReturn(new HarnessResult("ok", "line 3: IndexError: list index out of range", null, null, null, 0.1, null, null));
 
         CounterexampleVerifier.Verdict v = verifier.verify(problem, v2, reportV2, edge("{\"nums\":[1,2],\"target\":3}"));
 
@@ -110,5 +124,21 @@ class CounterexampleVerifierTest {
         assertThat(slow.confirmed()).isTrue();
         assertThat(slow.studentOutput().asString()).isEqualTo("La n = 10 000 depășește limita de 1000 ms.");
         assertThat(fast.rejectReason()).isEqualTo(CounterexampleVerifier.NOT_SLOW);
+    }
+
+    @Test
+    void efficiencyIsAlsoConfirmedByACrashOnALargeInput() {
+        Proposal efficiency = new Proposal("efficiency", 11, null, "r", List.of("a", "b", "c"));
+        TestReport crashed = new TestReport("ok", null, new TestReport.Summary(2, 3),
+                List.of(new TestReport.TestResult("large-10000", "large", false, null, null, null,
+                        "line 11: RecursionError: maximum recursion depth exceeded", null)),
+                List.of(new TestReport.Timing(1000, "ok", 3.0), new TestReport.Timing(10000, "error", null)),
+                null, TestReport.EFFICIENCY_UNKNOWN);
+
+        CounterexampleVerifier.Verdict v = verifier.verify(problem, v2, crashed, efficiency);
+
+        assertThat(v.confirmed()).isTrue();
+        assertThat(v.studentOutput().asString()).isEqualTo(
+                "La n = 10 000 se oprește cu eroare: line 11: RecursionError: maximum recursion depth exceeded");
     }
 }

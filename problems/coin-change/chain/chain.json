@@ -1,0 +1,47 @@
+{
+  "problemId": "coin-change",
+  "versions": [
+    {
+      "version": 1,
+      "file": "v1.py",
+      "description": "Ia mereu cât mai multe monede de valoarea cea mai mare, apoi trece la următoarea.",
+      "expectedFailures": ["basic-example", "basic-largest-first-fails", "basic-largest-first-stuck", "basic-unsorted-coins", "large-100", "large-1000", "large-10000", "large-100000"],
+      "referenceObservations": [
+        {
+          "type": "correctness",
+          "lines": [3, 4, 5],
+          "severity": "high",
+          "description": "Alegerea celei mai mari monede la fiecare pas nu dă minimul pentru orice set de monede: `[1, 3, 4]` cu 6 dă 3 (4 + 1 + 1) în loc de 2 (3 + 3), iar `[2, 5]` cu 6 dă -1 deși 2 + 2 + 2 formează suma."
+        }
+      ]
+    },
+    {
+      "version": 2,
+      "file": "v2.py",
+      "description": "Corectă: încearcă recursiv fiecare monedă, dar recalculează de fiecare dată aceleași sume rămase.",
+      "expectedFailures": ["large-1000", "large-10000", "large-100000"],
+      "referenceObservations": [
+        {
+          "type": "efficiency",
+          "lines": [5, 7],
+          "severity": "medium",
+          "description": "Aceeași sumă rămasă este rezolvată din nou pe fiecare drum care ajunge la ea, deci numărul de apeluri crește exponențial cu `amount`; depășește timpul de la n = 10³."
+        }
+      ]
+    },
+    {
+      "version": 3,
+      "file": "v3.py",
+      "description": "Calculează minimul pentru fiecare sumă de la 1 la `amount`, dar returnează infinitul în loc de -1 când suma nu se poate forma.",
+      "expectedFailures": ["edge-impossible-parity", "edge-coins-too-big", "edge-single-coin-impossible"],
+      "referenceObservations": [
+        {
+          "type": "edge_case",
+          "lines": [2, 7],
+          "severity": "medium",
+          "description": "Sumele imposibile rămân `float(\"inf\")`, iar funcția îl returnează direct; `[4, 6]` cu 9 dă inf în loc de -1."
+        }
+      ]
+    }
+  ]
+}

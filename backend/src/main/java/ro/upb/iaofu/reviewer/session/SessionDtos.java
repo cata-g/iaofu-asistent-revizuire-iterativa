@@ -45,7 +45,8 @@ public final class SessionDtos {
             TestReport report,
             Classification classification,
             List<ObservationView> observations,
-            String assistantMessage) {
+            String assistantMessage,
+            String llmStatus) {
     }
 
     public record HistoryResponse(UUID sessionId, String problemId, boolean finished, List<VersionView> versions) {

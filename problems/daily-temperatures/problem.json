@@ -1,0 +1,48 @@
+{
+  "id": "daily-temperatures",
+  "title": "Zile până la o zi mai caldă",
+  "category": "stack",
+  "difficulty": "medium",
+  "statement": "Vectorul `temperatures` conține temperatura medie a fiecărei zile, în ordine. Pentru fiecare zi `i`, află peste câte zile vine prima zi cu o temperatură strict mai mare decât `temperatures[i]`.\n\nReturnează un vector de aceeași lungime, în care poziția `i` conține acest număr de zile sau `0` dacă după ziua `i` nu mai urmează nicio zi mai caldă. O zi cu aceeași temperatură nu contează ca mai caldă.",
+  "examples": [
+    { "input": { "temperatures": [12, 14, 13, 11, 15, 15, 9] }, "output": [1, 3, 2, 1, 0, 0, 0], "explanation": "După ziua 0 (12 grade) urmează imediat 14 grade, deci 1. Ziua 2 (13 grade) așteaptă până în ziua 4 (15 grade), deci 2. După 15 nu mai vine nicio zi mai caldă, deci 0." },
+    { "input": { "temperatures": [-3, -5, 0] }, "output": [2, 1, 0] }
+  ],
+  "signature": {
+    "function": "daily_temperatures",
+    "params": [{ "name": "temperatures", "type": "list[int]" }],
+    "returns": "list[int]"
+  },
+  "constraints": [
+    "1 ≤ len(temperatures) ≤ 10⁵",
+    "-50 ≤ temperatures[i] ≤ 50"
+  ],
+  "timeLimitMs": 500,
+  "comparator": "exact",
+  "forbiddenTerms": [
+    { "term": "stivă", "allowedIfCode": "\\.append\\(|\\.pop\\(" },
+    { "term": "stiva", "allowedIfCode": "\\.append\\(|\\.pop\\(" },
+    { "term": "stack", "allowedIfCode": "\\.append\\(|\\.pop\\(" },
+    { "term": "monoton" },
+    { "term": "LIFO" },
+    { "term": "push" },
+    { "term": "pop", "allowedIfCode": "\\.pop\\(" },
+    { "term": "vârful" },
+    { "term": "în așteptare" },
+    { "term": "zilele care încă așteaptă" }
+  ],
+  "tests": [
+    { "id": "basic-example", "group": "basic", "input": { "temperatures": [12, 14, 13, 11, 15, 15, 9] }, "expected": [1, 3, 2, 1, 0, 0, 0] },
+    { "id": "basic-increasing", "group": "basic", "input": { "temperatures": [10, 20, 30, 40] }, "expected": [1, 1, 1, 0] },
+    { "id": "basic-negative", "group": "basic", "input": { "temperatures": [-3, -5, 0] }, "expected": [2, 1, 0] },
+    { "id": "basic-wait-long", "group": "basic", "input": { "temperatures": [20, 5, 8, 6, 7, 25, 3] }, "expected": [5, 1, 3, 1, 1, 0, 0] },
+    { "id": "basic-mixed", "group": "basic", "input": { "temperatures": [7, 3, 9, 1, 2, 10, 4, 5] }, "expected": [2, 1, 3, 1, 1, 0, 1, 0] },
+    { "id": "edge-single", "group": "edge", "input": { "temperatures": [18] }, "expected": [0] },
+    { "id": "edge-decreasing", "group": "edge", "input": { "temperatures": [30, 25, 20, 15, 10] }, "expected": [0, 0, 0, 0, 0] },
+    { "id": "edge-all-equal", "group": "edge", "input": { "temperatures": [22, 22, 22, 22] }, "expected": [0, 0, 0, 0] },
+    { "id": "edge-equal-then-warmer", "group": "edge", "input": { "temperatures": [16, 16, 15, 17] }, "expected": [3, 2, 1, 0] },
+    { "id": "edge-extremes", "group": "edge", "input": { "temperatures": [-50, 50, -50, 50] }, "expected": [1, 0, 1, 0] },
+    { "id": "edge-warmest-first", "group": "edge", "input": { "temperatures": [40, 1, 2, 3] }, "expected": [0, 1, 1, 0] }
+  ],
+  "large": { "sizes": [100, 1000, 10000, 100000], "seed": 53 }
+}

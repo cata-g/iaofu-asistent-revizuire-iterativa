@@ -1,0 +1,44 @@
+{
+  "id": "container-most-water",
+  "title": "Recipientul cu cea mai multă apă",
+  "category": "two-pointers",
+  "difficulty": "medium",
+  "statement": "Se dă o listă `height` de numere naturale. Pe o axă orizontală, în dreptul fiecărei poziții `i` se ridică o linie verticală de înălțime `height[i]`. Alege două linii care, împreună cu axa, formează un recipient, și returnează cea mai mare cantitate de apă pe care o poate ține un astfel de recipient.\n\nApa dintre liniile de pe pozițiile `i < j` ocupă aria `min(height[i], height[j]) · (j - i)`. Recipientul nu se poate înclina, iar liniile dintre cele două alese nu contează.",
+  "examples": [
+    {"input": {"height": [2, 7, 3, 6, 4, 8, 1]}, "output": 28, "explanation": "Liniile de pe pozițiile 1 și 5 au înălțimile 7 și 8, deci aria este min(7, 8) · (5 - 1) = 28."},
+    {"input": {"height": [4, 4]}, "output": 4}
+  ],
+  "signature": {"function": "max_area", "params": [{"name": "height", "type": "list[int]"}], "returns": "int"},
+  "constraints": [
+    "2 ≤ len(height) ≤ 10⁵",
+    "0 ≤ height[i] ≤ 10⁴"
+  ],
+  "timeLimitMs": 1000,
+  "comparator": "exact",
+  "forbiddenTerms": [
+    {"term": "doi pointeri", "allowedIfCode": "left|right"},
+    {"term": "two pointers", "allowedIfCode": "left|right"},
+    {"term": "pointer", "allowedIfCode": "left|right"},
+    {"term": "doi indici", "allowedIfCode": "left|right"},
+    {"term": "ambele capete", "allowedIfCode": "left|right"},
+    {"term": "capete", "allowedIfCode": "left|right"},
+    {"term": "îngustează"},
+    {"term": "mai scurtă"},
+    {"term": "mai joasă"},
+    {"term": "greedy"},
+    {"term": "lacom"}
+  ],
+  "tests": [
+    {"id": "basic-example", "group": "basic", "input": {"height": [2, 7, 3, 6, 4, 8, 1]}, "expected": 28},
+    {"id": "basic-increasing", "group": "basic", "input": {"height": [1, 2, 3, 4, 5, 6]}, "expected": 9},
+    {"id": "basic-decreasing", "group": "basic", "input": {"height": [6, 5, 4, 3, 2, 1]}, "expected": 9},
+    {"id": "basic-tall-inside", "group": "basic", "input": {"height": [3, 1, 9, 2, 2, 9, 1, 3]}, "expected": 27},
+    {"id": "basic-ends-best", "group": "basic", "input": {"height": [5, 1, 2, 1, 5]}, "expected": 20},
+    {"id": "edge-two", "group": "edge", "input": {"height": [3, 5]}, "expected": 3},
+    {"id": "edge-zeros", "group": "edge", "input": {"height": [0, 0, 0]}, "expected": 0},
+    {"id": "edge-zero-line", "group": "edge", "input": {"height": [0, 9]}, "expected": 0},
+    {"id": "edge-adjacent-best", "group": "edge", "input": {"height": [1, 8, 8, 1]}, "expected": 8},
+    {"id": "edge-equal-heights", "group": "edge", "input": {"height": [4, 4, 4, 4]}, "expected": 12}
+  ],
+  "large": {"sizes": [100, 1000, 10000, 100000], "seed": 41}
+}

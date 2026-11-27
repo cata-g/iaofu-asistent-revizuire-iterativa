@@ -2,7 +2,7 @@ import { CssBaseline, ThemeProvider, createTheme } from '@mui/material'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter, Route, Routes } from 'react-router'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router'
 import './index.css'
 import './monaco'
 import ProblemList from './pages/ProblemList'
@@ -30,6 +30,7 @@ createRoot(document.getElementById('root')!).render(
           <Routes>
             <Route path="/" element={<ProblemList />} />
             <Route path="/problems/:id" element={<Workspace />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </BrowserRouter>
       </QueryClientProvider>

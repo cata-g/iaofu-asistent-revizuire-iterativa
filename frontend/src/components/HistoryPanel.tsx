@@ -47,6 +47,9 @@ export default function HistoryPanel({ sessionId }: { sessionId: string }) {
           theme={dark ? 'vs-dark' : 'light'}
           original={codeOf(leftVersion)}
           modified={codeOf(rightVersion)}
+          // @monaco-editor/react disposes the models before the widget on unmount and logs an error otherwise
+          keepCurrentOriginalModel
+          keepCurrentModifiedModel
           options={{ readOnly: true, renderSideBySide: false, minimap: { enabled: false }, scrollBeyondLastLine: false }}
         />
       </Box>

@@ -45,10 +45,20 @@ public final class ReportBuilder {
         }
 
         int passed = (int) tests.stream().filter(TestReport.TestResult::passed).count();
-        boolean timedOut = timings.stream().anyMatch(t -> "timeout".equals(t.status()));
         return new TestReport(HarnessResult.OK, null, new TestReport.Summary(passed, tests.size()), tests, timings,
-                ComplexityEstimator.slope(timings),
-                timedOut ? TestReport.EFFICIENCY_TOO_SLOW : TestReport.EFFICIENCY_OK);
+                ComplexityEstimator.slope(timings), efficiency(timings));
+    }
+
+    /**
+     * Too slow on any timeout; ok only when every large input got the right answer in time.
+     * A wrong or crashing answer says nothing about speed, so the result is then unknown.
+     */
+    static String efficiency(List<TestReport.Timing> timings) {
+        if (timings.stream().anyMatch(t -> "timeout".equals(t.status()))) {
+            return TestReport.EFFICIENCY_TOO_SLOW;
+        }
+        return !timings.isEmpty() && timings.stream().allMatch(t -> "ok".equals(t.status()))
+                ? TestReport.EFFICIENCY_OK : TestReport.EFFICIENCY_UNKNOWN;
     }
 
     private static TestReport.TestResult largeTest(HarnessResult.RawTiming t, String status) {

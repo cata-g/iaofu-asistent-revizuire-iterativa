@@ -1,0 +1,72 @@
+{
+  "problemId": "meeting-rooms",
+  "versions": [
+    {
+      "version": 1,
+      "file": "v1.py",
+      "description": "Pentru fiecare ședință numără câte ședințe sunt în desfășurare la începutul ei: corectă, dar O(n²).",
+      "expectedFailures": [
+        "large-10000",
+        "large-100000"
+      ],
+      "referenceObservations": [
+        {
+          "type": "efficiency",
+          "lines": [
+            3,
+            4,
+            5
+          ],
+          "severity": "medium",
+          "description": "Pentru fiecare ședință parcurge toate ședințele, deci O(n²); depășește timpul de la n = 10⁴."
+        }
+      ]
+    },
+    {
+      "version": 2,
+      "file": "v2.py",
+      "description": "Ordonează după început, dar compară fiecare ședință doar cu cea dinaintea ei.",
+      "expectedFailures": [
+        "basic-unsorted",
+        "edge-pairs",
+        "large-100",
+        "large-1000",
+        "large-10000",
+        "large-100000"
+      ],
+      "referenceObservations": [
+        {
+          "type": "correctness",
+          "lines": [
+            5,
+            6
+          ],
+          "severity": "high",
+          "description": "O suprapunere cu ședința anterioară nu înseamnă o sală nouă, iar o sală eliberată mai devreme nu e refolosită: [[1, 2], [1, 2], [3, 4], [3, 4]] dă 3 în loc de 2."
+        }
+      ]
+    },
+    {
+      "version": 3,
+      "file": "v3.py",
+      "description": "Păstrează momentele de final ale sălilor ocupate, dar eliberează o sală doar dacă s-a terminat strict înainte de început.",
+      "expectedFailures": [
+        "edge-back-to-back",
+        "edge-nested-touching",
+        "large-100",
+        "large-1000",
+        "large-100000"
+      ],
+      "referenceObservations": [
+        {
+          "type": "edge_case",
+          "lines": [
+            8
+          ],
+          "severity": "medium",
+          "description": "Condiția < nu refolosește sala unei ședințe care se termină exact când începe următoarea: [[1, 3], [3, 5], [5, 7]] dă 2 în loc de 1."
+        }
+      ]
+    }
+  ]
+}
