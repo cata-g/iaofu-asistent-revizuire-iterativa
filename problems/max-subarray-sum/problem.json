@@ -1,0 +1,44 @@
+{
+  "id": "max-subarray-sum",
+  "title": "Subsecvența de sumă maximă",
+  "category": "dp",
+  "difficulty": "easy",
+  "statement": "Se dă un vector de numere întregi `nums`. O subsecvență este o porțiune de elemente consecutive din vector, cu cel puțin un element.\n\nReturnează cea mai mare sumă pe care o poate avea o subsecvență a lui `nums`.",
+  "examples": [
+    {"input": {"nums": [3, -4, 5, -1, 2, -6, 1]}, "output": 6, "explanation": "Subsecvența [5, -1, 2] are suma 6; nicio altă porțiune nu dă mai mult."},
+    {"input": {"nums": [-5, -2, -8]}, "output": -2, "explanation": "Subsecvența trebuie să aibă cel puțin un element, deci cea mai bună alegere este [-2]."}
+  ],
+  "signature": {"function": "max_subarray", "params": [{"name": "nums", "type": "list[int]"}], "returns": "int"},
+  "constraints": [
+    "1 ≤ len(nums) ≤ 10⁵",
+    "-10⁴ ≤ nums[i] ≤ 10⁴"
+  ],
+  "timeLimitMs": 1000,
+  "comparator": "exact",
+  "forbiddenTerms": [
+    {"term": "Kadane"},
+    {"term": "programare dinamică"},
+    {"term": "dinamic"},
+    {"term": "dp"},
+    {"term": "suma curentă"},
+    {"term": "suma parțială"},
+    {"term": "reset"},
+    {"term": "o singură parcurgere"},
+    {"term": "se termină pe poziția"},
+    {"term": "se termină la poziția"}
+  ],
+  "tests": [
+    {"id": "basic-example", "group": "basic", "input": {"nums": [3, -4, 5, -1, 2, -6, 1]}, "expected": 6},
+    {"id": "basic-all-positive", "group": "basic", "input": {"nums": [2, 1, 4, 3]}, "expected": 10},
+    {"id": "basic-dip-in-middle", "group": "basic", "input": {"nums": [6, -2, -3, 7, -10, 4]}, "expected": 8},
+    {"id": "basic-best-at-end", "group": "basic", "input": {"nums": [-3, 1, -2, 4, 5]}, "expected": 9},
+    {"id": "basic-max-before-min", "group": "basic", "input": {"nums": [5, -10, 3]}, "expected": 5},
+    {"id": "edge-single-positive", "group": "edge", "input": {"nums": [7]}, "expected": 7},
+    {"id": "edge-single-negative", "group": "edge", "input": {"nums": [-7]}, "expected": -7},
+    {"id": "edge-all-negative", "group": "edge", "input": {"nums": [-3, -1, -4, -6]}, "expected": -1},
+    {"id": "edge-zeros-and-negatives", "group": "edge", "input": {"nums": [-2, 0, -1]}, "expected": 0},
+    {"id": "edge-extreme-values", "group": "edge", "input": {"nums": [10000, -10000, 10000]}, "expected": 10000},
+    {"id": "edge-all-zero", "group": "edge", "input": {"nums": [0, 0, 0]}, "expected": 0}
+  ],
+  "large": {"sizes": [100, 1000, 10000, 100000], "seed": 74}
+}

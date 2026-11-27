@@ -59,12 +59,27 @@ public class CounterexampleVerifier {
                 : new Verdict(false, SAME_OUTPUT, studentOutput, reference.actual());
     }
 
+    /**
+     * Confirmed by a measurement on the large inputs: a timeout, or a crash that only shows at
+     * scale (e.g. RecursionError from deep recursion).
+     */
     private static Verdict verifyEfficiency(Problem problem, TestReport report) {
-        return report.timings().stream().filter(t -> "timeout".equals(t.status())).findFirst()
-                .map(t -> new Verdict(true, null, JsonNodeFactory.instance.stringNode(String.format(Locale.ROOT,
-                        "La n = %,d depășește limita de %d ms.", t.n(), problem.timeLimitMs()).replace(',', ' ')),
-                        null))
+        return report.timings().stream()
+                .filter(t -> "timeout".equals(t.status()) || "error".equals(t.status()))
+                .findFirst()
+                .map(t -> {
+                    String n = String.format(Locale.ROOT, "%,d", t.n()).replace(',', ' ');
+                    String evidence = "timeout".equals(t.status())
+                            ? "La n = " + n + " depășește limita de " + problem.timeLimitMs() + " ms."
+                            : "La n = " + n + " se oprește cu eroare: " + largeError(report, t.n());
+                    return new Verdict(true, null, JsonNodeFactory.instance.stringNode(evidence), null);
+                })
                 .orElse(Verdict.rejected(NOT_SLOW));
+    }
+
+    private static String largeError(TestReport report, int n) {
+        return report.tests().stream().filter(t -> ("large-" + n).equals(t.id()) && t.error() != null)
+                .map(TestReport.TestResult::error).findFirst().orElse("eroare");
     }
 
     /** Compares under the problem's comparator when the harness sent digests, else the raw answers. */

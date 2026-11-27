@@ -1,0 +1,73 @@
+{
+  "problemId": "min-subarray-len",
+  "versions": [
+    {
+      "version": 1,
+      "file": "v1.py",
+      "description": "Calculează suma tuturor subvectoarelor, pornind de la fiecare început: corectă, dar O(n²).",
+      "expectedFailures": [
+        "large-10000",
+        "large-100000"
+      ],
+      "referenceObservations": [
+        {
+          "type": "efficiency",
+          "lines": [
+            3,
+            4,
+            5
+          ],
+          "severity": "medium",
+          "description": "Reia suma de la fiecare poziție de început și merge mereu până la capăt, deci O(n²); depășește timpul de la n = 10⁴."
+        }
+      ]
+    },
+    {
+      "version": 2,
+      "file": "v2.py",
+      "description": "Restrânge corect subvectorul, dar returnează len(nums) + 1 când nu există niciun subvector.",
+      "expectedFailures": [
+        "edge-impossible",
+        "edge-single-short"
+      ],
+      "referenceObservations": [
+        {
+          "type": "edge_case",
+          "lines": [
+            11
+          ],
+          "severity": "medium",
+          "description": "Valoarea inițială ajunge în rezultat când suma totală e mai mică decât target: target 100, [1, 2, 3] dă 4 în loc de 0."
+        }
+      ]
+    },
+    {
+      "version": 3,
+      "file": "v3.py",
+      "description": "Tratează cazul fără soluție, dar scoate cel mult un element de la început la fiecare pas.",
+      "expectedFailures": [
+        "basic-example",
+        "basic-one-element",
+        "basic-at-end",
+        "basic-middle",
+        "edge-big-last",
+        "large-100",
+        "large-1000",
+        "large-10000",
+        "large-100000"
+      ],
+      "referenceObservations": [
+        {
+          "type": "correctness",
+          "lines": [
+            7,
+            9,
+            10
+          ],
+          "severity": "high",
+          "description": "Cu if în loc de while, subvectorul nu se scurtează cât se poate: target 7, [1, 1, 1, 1, 7] dă 5 în loc de 1."
+        }
+      ]
+    }
+  ]
+}

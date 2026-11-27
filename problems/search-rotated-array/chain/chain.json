@@ -1,0 +1,47 @@
+{
+  "problemId": "search-rotated-array",
+  "versions": [
+    {
+      "version": 1,
+      "file": "v1.py",
+      "description": "Căutare binară obișnuită, ca pe un vector ordonat; ignoră rotația.",
+      "expectedFailures": ["basic-example", "basic-left-part", "basic-right-part", "edge-two-rotated", "edge-smallest-last", "edge-negative", "large-100", "large-1000", "large-10000", "large-100000"],
+      "referenceObservations": [
+        {
+          "type": "correctness",
+          "lines": [7, 8, 9, 10],
+          "severity": "high",
+          "description": "Alegerea jumătății doar după nums[mid] < target presupune că tot vectorul e ordonat; în [5, 7, 8, 1, 2, 4] valoarea 2 e căutată la dreapta lui 8 și nu e găsită."
+        }
+      ]
+    },
+    {
+      "version": 2,
+      "file": "v2.py",
+      "description": "Tratează rotația corect, dar bucla se oprește cu while lo < hi, deci ultimul candidat rămas nu e verificat niciodată.",
+      "expectedFailures": ["basic-right-part", "basic-target-first", "edge-single-found", "edge-two-rotated", "edge-smallest-last", "edge-target-last", "edge-negative", "large-100", "large-1000", "large-100000"],
+      "referenceObservations": [
+        {
+          "type": "edge_case",
+          "lines": [3],
+          "severity": "medium",
+          "description": "Când intervalul de căutare se reduce la un singur element, bucla iese fără să-l compare: [5] cu target 5 dă -1."
+        }
+      ]
+    },
+    {
+      "version": 3,
+      "file": "v3.py",
+      "description": "Bucla e corectă, dar partea stângă e considerată ordonată doar dacă nums[lo] < nums[mid], strict; când lo == mid se alege greșit partea dreaptă.",
+      "expectedFailures": ["edge-two-rotated", "edge-smallest-last"],
+      "referenceObservations": [
+        {
+          "type": "edge_case",
+          "lines": [7],
+          "severity": "medium",
+          "description": "Pe o fereastră de două elemente lo == mid, iar comparația strictă trimite căutarea în partea greșită: [3, 1] cu target 1 dă -1."
+        }
+      ]
+    }
+  ]
+}

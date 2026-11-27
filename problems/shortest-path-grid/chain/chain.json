@@ -1,0 +1,53 @@
+{
+  "problemId": "shortest-path-grid",
+  "versions": [
+    {
+      "version": 1,
+      "file": "v1.py",
+      "description": "Explorează cu o stivă și fixează distanța unei celule la prima descoperire, deci găsește un drum, dar nu neapărat cel mai scurt.",
+      "expectedFailures": ["basic-loop", "basic-wall-pocket", "large-100", "large-1000", "large-10000", "large-100000"],
+      "referenceObservations": [
+        {
+          "type": "correctness",
+          "lines": [6, 8, 11],
+          "severity": "high",
+          "description": "Stiva scoate întâi ultima celulă adăugată, deci explorarea merge în adâncime; o celulă primește distanța drumului pe care a fost găsită prima dată, care poate fi mai lung decât cel minim (8 pași devin 12)."
+        }
+      ]
+    },
+    {
+      "version": 2,
+      "file": "v2.py",
+      "description": "Explorează în ordinea distanței, dar marchează celula abia când o scoate, iar startul-zid nu mai e verificat.",
+      "expectedFailures": ["edge-single-wall", "edge-start-wall", "large-1000", "large-10000", "large-100000"],
+      "referenceObservations": [
+        {
+          "type": "efficiency",
+          "lines": [9, 13],
+          "severity": "medium",
+          "description": "Celulele se marchează la scoatere, nu la adăugare, deci aceeași celulă intră de multe ori și fiecare copie își extinde vecinii; numărul de copii crește cu numărul de drumuri egale și depășește timpul de la n = 10³."
+        },
+        {
+          "type": "edge_case",
+          "lines": [5, 7],
+          "severity": "medium",
+          "description": "Lipsește verificarea colțului de start: dacă `grid[0][0]` este zid, funcția tot pornește din el și returnează o distanță în loc de -1."
+        }
+      ]
+    },
+    {
+      "version": 3,
+      "file": "v3.py",
+      "description": "Marcarea și verificarea colțurilor sunt corecte, dar destinația se verifică doar printre vecini, deci harta cu o singură celulă dă -1.",
+      "expectedFailures": ["edge-single-cell"],
+      "referenceObservations": [
+        {
+          "type": "edge_case",
+          "lines": [10, 13],
+          "severity": "low",
+          "description": "Celula scoasă nu este comparată cu destinația; când startul este chiar destinația (grila `[\".\"]`), bucla nu găsește niciun vecin și returnează -1 în loc de 0."
+        }
+      ]
+    }
+  ]
+}

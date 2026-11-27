@@ -34,7 +34,7 @@ def run(problem_dir, solution_code, job, timeout_ms=20000):
              {"name": "solution.py", "content": solution_code},
              {"name": "inputs.py", "content": read(os.path.join(problem_dir, "inputs.py"))}]
     body = json.dumps({"language": "python", "version": "3.12.0", "files": files,
-                       "stdin": json.dumps(job), "run_timeout": timeout_ms,
+                       "stdin": json.dumps(job), "run_timeout": timeout_ms, "run_cpu_time": timeout_ms,
                        "run_memory_limit": 512_000_000}).encode()
     req = urllib.request.Request(PISTON_URL + "/api/v2/execute", body, {"Content-Type": "application/json"})
     with urllib.request.urlopen(req, timeout=60) as resp:
@@ -48,7 +48,7 @@ def run(problem_dir, solution_code, job, timeout_ms=20000):
 def evaluate_job(problem):
     return {"mode": "evaluate", "function": problem["signature"]["function"],
             "params": [p["name"] for p in problem["signature"]["params"]],
-            "comparator": problem["comparator"], "testTimeoutMs": 2000,
+            "comparator": problem["comparator"], "testTimeoutMs": 1000,
             "tests": [{"id": t["id"], "group": t["group"], "input": t["input"], "expected": t["expected"]}
                       for t in problem["tests"]],
             "large": {**problem["large"], "timeLimitMs": problem["timeLimitMs"], "repeats": 3}}

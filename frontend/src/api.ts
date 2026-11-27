@@ -121,6 +121,7 @@ const STATUS_MESSAGES: Record<number, string> = {
   400: 'Cererea nu este validă. Verifică dacă ai scris cod înainte să trimiți.',
   404: 'Nu am găsit ce ai cerut. Întoarce-te la lista de probleme.',
   409: 'Acțiunea nu mai este posibilă: problema e marcată ca terminată sau o versiune se rulează deja.',
+  502: 'Serverul nu răspunde. Verifică dacă aplicația rulează.',
   503: 'Rularea codului nu este disponibilă acum. Încearcă din nou peste câteva secunde.',
 }
 

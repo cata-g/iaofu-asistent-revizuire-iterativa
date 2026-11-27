@@ -1,0 +1,44 @@
+{
+  "id": "first-unique-char",
+  "title": "Primul caracter unic",
+  "category": "hashing",
+  "difficulty": "easy",
+  "statement": "Se dă un șir `s` format din litere mici. Returnează poziția (indexul, numerotat de la 0) a primului caracter care apare **o singură dată** în tot șirul. Dacă niciun caracter nu apare o singură dată, returnează `-1`.",
+  "examples": [
+    {"input": {"s": "statistica"}, "output": 8, "explanation": "Literele s, t, a și i apar de mai multe ori; „c”, de pe poziția 8, apare o singură dată."},
+    {"input": {"s": "aabb"}, "output": -1}
+  ],
+  "signature": {"function": "first_uniq_char", "params": [{"name": "s", "type": "str"}], "returns": "int"},
+  "constraints": [
+    "1 ≤ len(s) ≤ 10⁵",
+    "s conține doar litere mici din alfabetul englez (a-z)"
+  ],
+  "timeLimitMs": 1000,
+  "comparator": "exact",
+  "forbiddenTerms": [
+    {"term": "frecvenț", "allowedIfCode": "count|Counter"},
+    {"term": "dicționar", "allowedIfCode": "\\{|dict\\(|Counter"},
+    {"term": "dictionar", "allowedIfCode": "\\{|dict\\(|Counter"},
+    {"term": "hash"},
+    {"term": "Counter"},
+    {"term": "contor", "allowedIfCode": "count"},
+    {"term": "numără", "allowedIfCode": "count|\\+=\\s*1|\\+\\s*1"},
+    {"term": "două parcurgeri"},
+    {"term": "două treceri"},
+    {"term": "tabel"}
+  ],
+  "tests": [
+    {"id": "basic-example", "group": "basic", "input": {"s": "statistica"}, "expected": 8},
+    {"id": "basic-first", "group": "basic", "input": {"s": "leu"}, "expected": 0},
+    {"id": "basic-middle", "group": "basic", "input": {"s": "aabcbd"}, "expected": 3},
+    {"id": "basic-after-pairs", "group": "basic", "input": {"s": "ppqqrst"}, "expected": 4},
+    {"id": "basic-spread", "group": "basic", "input": {"s": "xyzxyw"}, "expected": 2},
+    {"id": "edge-single", "group": "edge", "input": {"s": "a"}, "expected": 0},
+    {"id": "edge-none", "group": "edge", "input": {"s": "aabb"}, "expected": -1},
+    {"id": "edge-last-char", "group": "edge", "input": {"s": "aabbc"}, "expected": 4},
+    {"id": "edge-odd-count", "group": "edge", "input": {"s": "aaab"}, "expected": 3},
+    {"id": "edge-all-same", "group": "edge", "input": {"s": "aaa"}, "expected": -1},
+    {"id": "edge-two-different", "group": "edge", "input": {"s": "ab"}, "expected": 0}
+  ],
+  "large": {"sizes": [100, 1000, 10000, 100000], "seed": 37}
+}

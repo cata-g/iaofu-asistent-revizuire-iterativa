@@ -1,0 +1,74 @@
+{
+  "problemId": "first-unique-char",
+  "versions": [
+    {
+      "version": 1,
+      "file": "v1.py",
+      "description": "Pentru fiecare poziție numără din nou aparițiile caracterului în tot șirul: corectă, dar O(n²).",
+      "expectedFailures": [
+        "large-10000",
+        "large-100000"
+      ],
+      "referenceObservations": [
+        {
+          "type": "efficiency",
+          "lines": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "severity": "medium",
+          "description": "La fiecare poziție parcurge tot șirul ca să numere caracterul, deci O(n²); depășește timpul de la n = 10⁴."
+        }
+      ]
+    },
+    {
+      "version": 2,
+      "file": "v2.py",
+      "description": "Numără aparițiile, dar a doua buclă se oprește înainte de ultimul caracter.",
+      "expectedFailures": [
+        "edge-single",
+        "edge-last-char",
+        "edge-odd-count"
+      ],
+      "referenceObservations": [
+        {
+          "type": "edge_case",
+          "lines": [
+            5
+          ],
+          "severity": "medium",
+          "description": "range(len(s) - 1) sare peste ultima poziție: „aabbc” dă -1 în loc de 4, iar „a” dă -1 în loc de 0."
+        }
+      ]
+    },
+    {
+      "version": 3,
+      "file": "v3.py",
+      "description": "O singură trecere care scoate caracterul la a doua apariție, dar îl adaugă înapoi la a treia.",
+      "expectedFailures": [
+        "basic-example",
+        "edge-odd-count",
+        "edge-all-same",
+        "large-100",
+        "large-1000",
+        "large-10000",
+        "large-100000"
+      ],
+      "referenceObservations": [
+        {
+          "type": "correctness",
+          "lines": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "severity": "high",
+          "description": "Un caracter care apare de un număr impar de ori ajunge din nou printre candidați: „aaab” dă 2 în loc de 3."
+        }
+      ]
+    }
+  ]
+}

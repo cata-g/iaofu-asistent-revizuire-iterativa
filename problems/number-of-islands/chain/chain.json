@@ -1,0 +1,47 @@
+{
+  "problemId": "number-of-islands",
+  "versions": [
+    {
+      "version": 1,
+      "file": "v1.py",
+      "description": "Numără celulele de uscat fără vecin de uscat deasupra sau în stânga, presupunând că fiecare insulă are un singur astfel de „colț”.",
+      "expectedFailures": ["basic-example", "basic-u-shape", "basic-staircase", "large-100", "large-1000", "large-10000", "large-100000"],
+      "referenceObservations": [
+        {
+          "type": "correctness",
+          "lines": [8, 9, 10],
+          "severity": "high",
+          "description": "O insulă în formă de U sau de scară are mai multe celule fără vecin sus sau în stânga; fiecare e numărată ca insulă nouă, deci `[\"10101\", \"10101\", \"11111\"]` dă 3 în loc de 1."
+        }
+      ]
+    },
+    {
+      "version": 2,
+      "file": "v2.py",
+      "description": "Explorează corect fiecare insulă, dar recursiv, așa că o insulă lungă depășește limita de recursivitate a lui Python.",
+      "expectedFailures": ["large-10000", "large-100000"],
+      "referenceObservations": [
+        {
+          "type": "efficiency",
+          "lines": [5, 11, 12, 13, 14],
+          "severity": "medium",
+          "description": "Fiecare celulă a insulei adaugă un apel pe stiva de execuție; pe o insulă în formă de șarpe cu peste 1000 de celule, `explore` aruncă RecursionError (de la n = 10⁴)."
+        }
+      ]
+    },
+    {
+      "version": 3,
+      "file": "v3.py",
+      "description": "Explorare iterativă, dar verifică doar marginile de jos și din dreapta ale hărții; indicii negativi trec de verificare.",
+      "expectedFailures": ["basic-u-shape", "basic-ring", "edge-all-land", "edge-single-land", "edge-single-row", "large-100", "large-1000", "large-10000", "large-100000"],
+      "referenceObservations": [
+        {
+          "type": "edge_case",
+          "lines": [15],
+          "severity": "high",
+          "description": "Lipsesc condițiile `0 <= nr` și `0 <= nc`: în Python `grid[-1]` este ultimul rând, deci explorarea iese prin marginea de sus sau din stânga, ajunge la coordonate tot mai negative și se oprește cu IndexError (de exemplu pe `[\"1\"]`)."
+        }
+      ]
+    }
+  ]
+}

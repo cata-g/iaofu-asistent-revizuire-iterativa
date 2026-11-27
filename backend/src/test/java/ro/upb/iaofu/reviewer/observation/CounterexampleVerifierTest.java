@@ -125,4 +125,20 @@ class CounterexampleVerifierTest {
         assertThat(slow.studentOutput().asString()).isEqualTo("La n = 10 000 depășește limita de 1000 ms.");
         assertThat(fast.rejectReason()).isEqualTo(CounterexampleVerifier.NOT_SLOW);
     }
+
+    @Test
+    void efficiencyIsAlsoConfirmedByACrashOnALargeInput() {
+        Proposal efficiency = new Proposal("efficiency", 11, null, "r", List.of("a", "b", "c"));
+        TestReport crashed = new TestReport("ok", null, new TestReport.Summary(2, 3),
+                List.of(new TestReport.TestResult("large-10000", "large", false, null, null, null,
+                        "line 11: RecursionError: maximum recursion depth exceeded", null)),
+                List.of(new TestReport.Timing(1000, "ok", 3.0), new TestReport.Timing(10000, "error", null)),
+                null, TestReport.EFFICIENCY_UNKNOWN);
+
+        CounterexampleVerifier.Verdict v = verifier.verify(problem, v2, crashed, efficiency);
+
+        assertThat(v.confirmed()).isTrue();
+        assertThat(v.studentOutput().asString()).isEqualTo(
+                "La n = 10 000 se oprește cu eroare: line 11: RecursionError: maximum recursion depth exceeded");
+    }
 }

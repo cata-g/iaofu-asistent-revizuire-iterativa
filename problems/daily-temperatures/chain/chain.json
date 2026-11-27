@@ -1,0 +1,47 @@
+{
+  "problemId": "daily-temperatures",
+  "versions": [
+    {
+      "version": 1,
+      "file": "v1.py",
+      "description": "Pentru fiecare zi caută înainte, zi cu zi, prima zi mai caldă. Corect, dar O(n²) când multe zile nu au una mai caldă după ele.",
+      "expectedFailures": ["large-10000", "large-100000"],
+      "referenceObservations": [
+        {
+          "type": "efficiency",
+          "lines": [5, 6],
+          "severity": "medium",
+          "description": "Bucla interioară reia căutarea de la fiecare zi; pe o perioadă în care temperaturile doar scad, fiecare zi parcurge tot restul vectorului."
+        }
+      ]
+    },
+    {
+      "version": 2,
+      "file": "v2.py",
+      "description": "Rezolvă zilele în așteptare într-o singură parcurgere, dar salvează indicele zilei mai calde în loc de numărul de zile până la ea.",
+      "expectedFailures": ["basic-example", "basic-increasing", "basic-negative", "basic-wait-long", "basic-mixed", "edge-equal-then-warmer", "edge-extremes", "edge-warmest-first", "large-100", "large-1000", "large-10000", "large-100000"],
+      "referenceObservations": [
+        {
+          "type": "correctness",
+          "lines": [7],
+          "severity": "high",
+          "description": "answer[j] = i dă ziua în care se încălzește, nu distanța i - j: [10, 20, 30, 40] dă [1, 2, 3, 0] în loc de [1, 1, 1, 0]."
+        }
+      ]
+    },
+    {
+      "version": 3,
+      "file": "v3.py",
+      "description": "Distanța e corectă, dar o zi cu aceeași temperatură e tratată ca mai caldă (<= în loc de <).",
+      "expectedFailures": ["basic-example", "edge-all-equal", "edge-equal-then-warmer", "edge-extremes", "large-100", "large-1000", "large-10000", "large-100000"],
+      "referenceObservations": [
+        {
+          "type": "edge_case",
+          "lines": [5],
+          "severity": "medium",
+          "description": "Condiția <= rezolvă o zi la prima zi egală: [22, 22, 22, 22] dă [1, 1, 1, 0] în loc de [0, 0, 0, 0]."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "id": "group-anagrams",
+  "title": "Gruparea anagramelor",
+  "category": "hashing",
+  "difficulty": "medium",
+  "statement": "Se dă o listă de cuvinte `strs`. Două cuvinte sunt anagrame dacă unul se obține din celălalt prin rearanjarea literelor, fiecare literă fiind folosită de exact atâtea ori de câte apare. Împarte cuvintele în grupuri, astfel încât fiecare grup să conțină exact cuvintele care sunt anagrame între ele, și returnează lista de grupuri.\n\nUn cuvânt care apare de mai multe ori în `strs` apare de tot atâtea ori și în grupul lui. Ordinea grupurilor și ordinea cuvintelor dintr-un grup nu contează.",
+  "examples": [
+    {"input": {"strs": ["mar", "rac", "ram", "arc", "cer", "car"]}, "output": [["mar", "ram"], ["rac", "arc", "car"], ["cer"]], "explanation": "„mar” și „ram” au aceleași litere; „cer” nu are nicio anagramă în listă, deci rămâne singur."},
+    {"input": {"strs": ["aab", "aba", "abb"]}, "output": [["aab", "aba"], ["abb"]], "explanation": "„abb” are două litere b și un singur a, deci nu e anagramă cu „aab”."}
+  ],
+  "signature": {"function": "group_anagrams", "params": [{"name": "strs", "type": "list[str]"}], "returns": "list[list[str]]"},
+  "constraints": [
+    "1 ≤ len(strs) ≤ 10⁵",
+    "0 ≤ len(strs[i]) ≤ 10",
+    "strs[i] conține doar litere mici din alfabetul englez (a-z)"
+  ],
+  "timeLimitMs": 1000,
+  "comparator": "unordered_nested",
+  "forbiddenTerms": [
+    {"term": "dicționar", "allowedIfCode": "\\{|dict\\("},
+    {"term": "dictionar", "allowedIfCode": "\\{|dict\\("},
+    {"term": "hash"},
+    {"term": "cheie", "allowedIfCode": "\\{|dict\\("},
+    {"term": "cheia", "allowedIfCode": "\\{|dict\\("},
+    {"term": "sortează", "allowedIfCode": "sort"},
+    {"term": "sortat", "allowedIfCode": "sort"},
+    {"term": "sortare", "allowedIfCode": "sort"},
+    {"term": "frecvenț", "allowedIfCode": "count|Counter"},
+    {"term": "Counter"},
+    {"term": "canonic"}
+  ],
+  "tests": [
+    {"id": "basic-example", "group": "basic", "input": {"strs": ["mar", "rac", "ram", "arc", "cer", "car"]}, "expected": [["arc", "car", "rac"], ["cer"], ["mar", "ram"]]},
+    {"id": "basic-no-anagrams", "group": "basic", "input": {"strs": ["abc", "def", "ghi"]}, "expected": [["abc"], ["def"], ["ghi"]]},
+    {"id": "basic-one-group", "group": "basic", "input": {"strs": ["listen", "silent", "enlist", "tinsel"]}, "expected": [["enlist", "listen", "silent", "tinsel"]]},
+    {"id": "basic-mixed-lengths", "group": "basic", "input": {"strs": ["ab", "ba", "abc", "bca", "a", "cab"]}, "expected": [["a"], ["ab", "ba"], ["abc", "bca", "cab"]]},
+    {"id": "basic-repeated-letters", "group": "basic", "input": {"strs": ["aab", "aba", "abb", "bba", "baa"]}, "expected": [["aab", "aba", "baa"], ["abb", "bba"]]},
+    {"id": "edge-single", "group": "edge", "input": {"strs": ["a"]}, "expected": [["a"]]},
+    {"id": "edge-empty-string", "group": "edge", "input": {"strs": [""]}, "expected": [[""]]},
+    {"id": "edge-two-empty", "group": "edge", "input": {"strs": ["", ""]}, "expected": [["", ""]]},
+    {"id": "edge-duplicates", "group": "edge", "input": {"strs": ["ab", "ba", "ab"]}, "expected": [["ab", "ab", "ba"]]},
+    {"id": "edge-same-letter-counts", "group": "edge", "input": {"strs": ["a", "aa", "aaa", "aa"]}, "expected": [["a"], ["aa", "aa"], ["aaa"]]}
+  ],
+  "large": {"sizes": [100, 1000, 10000, 100000], "seed": 31}
+}

@@ -1,5 +1,27 @@
 {
   "description": "Împărțirea setului de probleme (PRD 7.3). Setul de reglare se folosește la ajustarea promptului; setul de test nu se rulează până la evaluarea finală.",
-  "tuning": ["two-sum", "valid-parentheses", "longest-unique-substring", "merge-intervals", "first-position"],
-  "test": []
+  "tuning": [
+    "two-sum",
+    "valid-parentheses",
+    "longest-unique-substring",
+    "merge-intervals",
+    "first-position"
+  ],
+  "test": [
+    "first-unique-char",
+    "group-anagrams",
+    "container-most-water",
+    "min-subarray-len",
+    "insert-interval",
+    "meeting-rooms",
+    "daily-temperatures",
+    "next-greater-element",
+    "min-eating-speed",
+    "search-rotated-array",
+    "course-order",
+    "number-of-islands",
+    "shortest-path-grid",
+    "coin-change",
+    "max-subarray-sum"
+  ]
 }

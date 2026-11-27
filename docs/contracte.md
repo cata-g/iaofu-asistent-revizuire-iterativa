@@ -154,7 +154,7 @@ Inputul mare se generează în sandbox, cu `generate(n, random.Random(seed + n))
 | `error` | `"timeout"` sau `"line 4: IndexError: list index out of range"` (linia din `solution.py`) |
 | `timings[].status` | `ok`, `timeout`, `error`, `wrong` (răspuns greșit pe inputul mare), `skipped` |
 | `slope` | panta regresiei pe scară log-log (log₁₀ timp față de log₁₀ n), calculată pe punctele `ok` sau `wrong`; `null` dacă sunt mai puțin de două |
-| `efficiency` | `ok` dacă toate n-urile au terminat; `too_slow` dacă a apărut vreun timeout; `unknown` dacă nu s-a ajuns la inputurile mari (`compile_error`) |
+| `efficiency` | `too_slow` dacă a apărut vreun timeout; `ok` dacă toate n-urile au dat răspunsul corect în limita de timp; altfel `unknown` (răspuns greșit sau eroare pe un input mare, ori `compile_error`) |
 
 Un test `large-<n>` trece dacă `timings[n].status == "ok"` și digest-ul coincide cu cel al referinței. Testele `large` intră în `summary`, iar diferențele de eficiență apar astfel și în clasificare.
 
@@ -202,7 +202,7 @@ O observație e o ipoteză a LLM-ului despre o problemă din cod. Ajunge la stud
 **Verificarea prin contraexemplu (F12):**
 
 - `correctness` și `edge_case`: inputul trebuie să treacă `is_valid` (altfel `invalid_input`). Apoi se rulează codul studentului și referința pe input. Observația e confirmată dacă rezultatele normalizate diferă sau dacă studentul dă eroare ori timeout. Altfel e `same_output`.
-- `efficiency`: confirmată doar dacă `TestReport.efficiency == "too_slow"`; altfel `not_slow`. Dovada afișată e timpul măsurat („pe n = 10 000 depășește 1 s”).
+- `efficiency`: confirmată doar de o măsurătoare pe inputurile mari: un timeout sau o eroare care apare doar la scară (de exemplu `RecursionError`); altfel `not_slow`. Dovada afișată e măsurătoarea („La n = 10 000 depășește limita de 1000 ms.” sau „La n = 10 000 se oprește cu eroare: …”).
 - După verificare, filtrul anti-scurgere verifică riscul (afișat împreună cu nivelul 1) și nivelurile 1 și 2. Dacă găsește termeni interziși, cere modelului să rescrie cele trei texte, de cel mult 2 ori. O observație care încă scurge după asta e `rejected` cu `leak`; `leak_retries` arată câte rescrieri au fost necesare.
 - Două observații confirmate pe aceeași linie și de același tip: a doua e `duplicate`.
 

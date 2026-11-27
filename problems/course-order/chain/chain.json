@@ -1,0 +1,47 @@
+{
+  "problemId": "course-order",
+  "versions": [
+    {
+      "version": 1,
+      "file": "v1.py",
+      "description": "Parcurge cursurile cu un singur marcaj „vizitat” și consideră orice curs întâlnit a doua oară drept dependență circulară.",
+      "expectedFailures": ["basic-shared-prerequisite", "basic-reverse-ids", "large-100", "large-10000"],
+      "referenceObservations": [
+        {
+          "type": "correctness",
+          "lines": [14, 15],
+          "severity": "high",
+          "description": "Un curs deja vizitat nu înseamnă o dependență circulară: poate fi atins pe două drumuri diferite sau dintr-o parcurgere anterioară. `[[1, 0], [2, 0], [3, 1], [3, 2]]` dă False deși ordinea 0, 1, 2, 3 e validă."
+        }
+      ]
+    },
+    {
+      "version": 2,
+      "file": "v2.py",
+      "description": "Corectă: pentru fiecare curs verifică separat dacă se poate ajunge din nou la el, deci refă aceeași parcurgere de n ori.",
+      "expectedFailures": ["large-10000", "large-100000"],
+      "referenceObservations": [
+        {
+          "type": "efficiency",
+          "lines": [5, 6, 7],
+          "severity": "medium",
+          "description": "O parcurgere nouă, cu `seen` gol, pornește din fiecare curs, deci timpul e O(n · (n + m)); pe un lanț lung de cerințe depășește limita de la n = 10⁴."
+        }
+      ]
+    },
+    {
+      "version": 3,
+      "file": "v3.py",
+      "description": "Elimină pe rând cursurile fără cerințe rămase, dar ține evidența doar pentru cursurile care apar în perechi.",
+      "expectedFailures": ["edge-no-prerequisites", "edge-single-course", "edge-isolated-course", "large-100", "large-10000"],
+      "referenceObservations": [
+        {
+          "type": "edge_case",
+          "lines": [5, 8, 11, 20],
+          "severity": "medium",
+          "description": "Cursurile care nu apar în nicio pereche nu intră în `waiting`, deci nu sunt numărate în `taken`; comparația cu `num_courses` dă False când există cursuri fără legături, de exemplu `num_courses = 1` fără cerințe."
+        }
+      ]
+    }
+  ]
+}
