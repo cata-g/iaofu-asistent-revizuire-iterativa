@@ -10,6 +10,8 @@ services:
       PISTON_OUTPUT_MAX_SIZE: "65536"
       # Upper bound for the per-request run_timeout (ms).
       PISTON_RUN_TIMEOUT: "30000"
+      # Upper bound for the per-request run_cpu_time (ms); the default 3 s is too low.
+      PISTON_RUN_CPU_TIME: "30000"
     volumes:
       - piston-packages:/piston/packages
     tmpfs:
@@ -67,7 +69,7 @@ services:
     volumes:
       - ./problems:/problems:ro
     ports:
-      - "127.0.0.1:8080:8080"
+      - "127.0.0.1:${BACKEND_PORT:-8080}:8080"
 
   frontend:
     build: ./frontend

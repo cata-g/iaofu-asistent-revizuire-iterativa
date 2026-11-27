@@ -110,8 +110,11 @@ public final class ObservationPrompt {
             s.append(String.format(Locale.ROOT, ". Panta log-log ≈ %.2f (timpul crește cam ca n^%.1f)", r.slope(),
                     r.slope()));
         }
-        s.append(". Eficiență: ").append("too_slow".equals(r.efficiency()) ? "prea lent" : "în limita de timp")
-                .append(".\n");
+        s.append(". Eficiență: ").append(switch (r.efficiency()) {
+            case "too_slow" -> "prea lent";
+            case "ok" -> "în limita de timp";
+            default -> "necunoscută (răspunsuri greșite sau erori pe inputurile mari)";
+        }).append(".\n");
         return s.toString();
     }
 

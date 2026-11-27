@@ -108,7 +108,7 @@ Backend-ul trimite la Piston (`POST /api/v2/execute`, Python 3.12.0) trei fișie
 
 Jobul ajunge pe stdin, ca JSON. Rezultatul vine ca o singură linie, prefixată cu `__HARNESS_RESULT__`, așa că un `print` din codul studentului nu-l poate strica.
 
-Fiecare apel al funcției are propria limită de timp, impusă cu `signal.setitimer`. De aceea o buclă infinită pe un test afectează doar acel test (F7). Testele de bază și cazurile limită au 2 s pe test. Inputurile mari au `timeLimitMs` pe apel.
+Fiecare apel al funcției are propria limită de timp, impusă cu `signal.setitimer`. De aceea o buclă infinită pe un test afectează doar acel test (F7). Testele de bază și cazurile limită au 1 s pe test. Inputurile mari au `timeLimitMs` pe apel.
 
 | Mod | Ce face | Folosit de |
 |---|---|---|
@@ -256,7 +256,7 @@ Fiecare apel se jurnalizează în `llm_call`, cu tokenii și costul (N4). Un pla
 
 ## 6. API
 
-Toate rutele sunt sub `/api`, cu JSON. Erorile au forma `{ "error": "mesaj" }`, cu statusurile 400 (input invalid), 404 (resursă inexistentă) și 409 (sesiune terminată).
+Toate rutele sunt sub `/api`, cu JSON. Erorile au forma `{ "error": "mesaj" }`, cu statusurile 400 (input invalid), 404 (resursă inexistentă) și 409 (sesiune terminată sau o trimitere a aceleiași sesiuni încă rulează).
 
 ### `GET /api/problems?category=&difficulty=`
 
@@ -352,10 +352,13 @@ Versiunile sesiunii, cu codul lor (F10). Diff-ul vizual îl face Monaco `DiffEdi
   "versions": [
     { "version": 1, "submissionId": "…", "code": "…", "createdAt": "2026-11-07T18:00:00Z",
       "summary": { "passed": 12, "total": 14 }, "efficiency": "too_slow",
-      "classification": null, "observations": [ … ] }
+      "report": { … }, "classification": null, "observations": [ … ],
+      "assistantMessage": null, "llmStatus": "ok" }
   ]
 }
 ```
+
+Fiecare versiune are aceleași date ca răspunsul trimiterii, așa că frontend-ul poate reface ultima versiune după un refresh.
 
 ### `GET /api/export/{table}.csv`
 

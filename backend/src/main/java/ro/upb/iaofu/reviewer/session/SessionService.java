@@ -108,7 +108,8 @@ public class SessionService {
                     : json.readValue(s.getClassificationJson(), Classification.class);
             return new SessionDtos.VersionView(s.getVersion(), s.getId(), s.getCode(), s.getCreatedAt(),
                     report.summary(), report.efficiency(), report, visibleClassification(session, classification),
-                    views.getOrDefault(s.getId(), List.of()), s.getAssistantMessage());
+                    views.getOrDefault(s.getId(), List.of()), s.getAssistantMessage(),
+                    s.getLlmStatus());
         }).toList();
         return new SessionDtos.HistoryResponse(sessionId, session.getProblemId(), session.isFinished(), items);
     }

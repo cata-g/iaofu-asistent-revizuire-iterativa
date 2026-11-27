@@ -45,3 +45,35 @@ export function studyMode(): string | null {
 export function studyParticipant(): string | null {
   return participant
 }
+
+// The session of each problem is kept for the tab, so a refresh or a trip back to the
+// list continues it. The key includes the variant and participant: a new study link
+// for the same problem starts a new session.
+function sessionKey(problemId: string): string {
+  return `study.session.${problemId}.${mode ?? 'default'}.${participant ?? ''}`
+}
+
+export function savedSession(problemId: string): string | null {
+  return read(sessionKey(problemId))
+}
+
+export function saveSession(problemId: string, sessionId: string) {
+  write(sessionKey(problemId), sessionId)
+}
+
+export function forgetSession(problemId: string) {
+  try {
+    sessionStorage.removeItem(sessionKey(problemId))
+  } catch {
+    // storage unavailable
+  }
+}
+
+/** The code in the editor that was not submitted yet. */
+export function savedDraft(sessionId: string): string | null {
+  return read(`study.draft.${sessionId}`)
+}
+
+export function saveDraft(sessionId: string, code: string) {
+  write(`study.draft.${sessionId}`, code)
+}

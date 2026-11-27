@@ -42,7 +42,8 @@ function efficiencyMessage(report: TestReport, timeLimitMs: number): string {
   if (firstTimeout) {
     return `Prea lent: la n = ${firstTimeout.n.toLocaleString('ro-RO')} depășește limita de ${timeLimitMs} ms.`
   }
-  return 'Termină în limita de timp pe toate inputurile mari.'
+  if (report.efficiency === 'ok') return 'Termină în limita de timp pe toate inputurile mari.'
+  return 'Timpul nu se poate aprecia cât timp răspunsurile pe inputurile mari sunt greșite.'
 }
 
 export default function ResultsPanel({ report, timeLimitMs }: { report: TestReport; timeLimitMs: number }) {

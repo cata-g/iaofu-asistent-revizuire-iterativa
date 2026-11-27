@@ -54,7 +54,7 @@ public class CounterexampleVerifier {
         HarnessResult student = execution.runSingle(problem, code, input);
         JsonNode studentOutput = studentOutput(student);
         boolean differs = !student.ok() || student.error() != null
-                || !Objects.equals(student.actual(), reference.actual());
+                || !sameAnswer(student, reference);
         return differs ? new Verdict(true, null, studentOutput, reference.actual())
                 : new Verdict(false, SAME_OUTPUT, studentOutput, reference.actual());
     }
@@ -65,6 +65,14 @@ public class CounterexampleVerifier {
                         "La n = %,d depășește limita de %d ms.", t.n(), problem.timeLimitMs()).replace(',', ' ')),
                         null))
                 .orElse(Verdict.rejected(NOT_SLOW));
+    }
+
+    /** Compares under the problem's comparator when the harness sent digests, else the raw answers. */
+    private static boolean sameAnswer(HarnessResult student, HarnessResult reference) {
+        if (student.digest() != null && reference.digest() != null) {
+            return student.digest().equals(reference.digest());
+        }
+        return Objects.equals(student.actual(), reference.actual());
     }
 
     private static JsonNode studentOutput(HarnessResult student) {

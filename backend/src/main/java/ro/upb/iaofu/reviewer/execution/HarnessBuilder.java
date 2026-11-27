@@ -16,7 +16,7 @@ import tools.jackson.databind.node.ObjectNode;
 @Component
 public class HarnessBuilder {
 
-    static final int TEST_TIMEOUT_MS = 2000;
+    static final int TEST_TIMEOUT_MS = 1000;
     static final int LARGE_REPEATS = 3;
 
     private final JsonMapper json;

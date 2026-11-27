@@ -31,7 +31,7 @@ class CounterexampleVerifierTest {
     }
 
     private static HarnessResult single(String actual, String error) {
-        return new HarnessResult("ok", null, null, null, actual == null ? null : node(actual), 0.1, null);
+        return new HarnessResult("ok", null, null, null, actual == null ? null : node(actual), 0.1, null, null);
     }
 
     private static Proposal edge(String input) {
@@ -66,11 +66,25 @@ class CounterexampleVerifierTest {
     }
 
     @Test
+    void sameAnswerUnderTheComparatorRejectsEvenIfOrderDiffers() {
+        when(execution.isValidInput(eq(problem), any())).thenReturn(true);
+        when(execution.runSingle(eq(problem), eq(problem.referenceCode()), any()))
+                .thenReturn(new HarnessResult("ok", null, null, null, node("[0,1]"), 0.1, null, "abc"));
+        when(execution.runSingle(eq(problem), eq(v2), any()))
+                .thenReturn(new HarnessResult("ok", null, null, null, node("[1,0]"), 0.1, null, "abc"));
+
+        CounterexampleVerifier.Verdict v = verifier.verify(problem, v2, reportV2, edge("{\"nums\":[1,2],\"target\":3}"));
+
+        assertThat(v.confirmed()).isFalse();
+        assertThat(v.rejectReason()).isEqualTo(CounterexampleVerifier.SAME_OUTPUT);
+    }
+
+    @Test
     void studentCrashConfirms() {
         when(execution.isValidInput(eq(problem), any())).thenReturn(true);
         when(execution.runSingle(eq(problem), eq(problem.referenceCode()), any())).thenReturn(single("[0,1]", null));
         when(execution.runSingle(eq(problem), eq(v2), any()))
-                .thenReturn(new HarnessResult("ok", "line 3: IndexError: list index out of range", null, null, null, 0.1, null));
+                .thenReturn(new HarnessResult("ok", "line 3: IndexError: list index out of range", null, null, null, 0.1, null, null));
 
         CounterexampleVerifier.Verdict v = verifier.verify(problem, v2, reportV2, edge("{\"nums\":[1,2],\"target\":3}"));
 

@@ -71,7 +71,7 @@ class FeedbackFlowTest {
     }
 
     private static HarnessResult single(String actual) {
-        return new HarnessResult("ok", null, null, null, Fixtures.JSON.readTree(actual), 0.1, null);
+        return new HarnessResult("ok", null, null, null, Fixtures.JSON.readTree(actual), 0.1, null, null);
     }
 
     private static LlmClient.Reply reply(String text) {

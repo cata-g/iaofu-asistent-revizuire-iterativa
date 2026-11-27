@@ -105,13 +105,13 @@ def run_tests(fn, job):
     results = []
     for test in job.get("tests", []):
         value, error, ms = call(fn, job["params"], test["input"], job["testTimeoutMs"] / 1000)
-        actual = None if error else canon(value, job["comparator"])
         expected = canon(test["expected"], job["comparator"])
         results.append({
             "id": test["id"],
             "group": test["group"],
-            "passed": error is None and actual == expected,
-            "actual": None if error else short(actual),
+            "passed": error is None and canon(value, job["comparator"]) == expected,
+            # shown to the student as returned; only the comparison uses the comparator
+            "actual": None if error else short(canon(value)),
             "error": error,
             "timeMs": round(ms, 3),
         })
@@ -154,8 +154,8 @@ def run_large(fn, job):
 def run_single(fn, job):
     """Runs one input (used by the counterexample verifier)."""
     value, error, ms = call(fn, job["params"], job["input"], job["testTimeoutMs"] / 1000)
-    return {"actual": None if error else short(canon(value, job["comparator"])), "error": error,
-            "timeMs": round(ms, 3)}
+    return {"actual": None if error else short(canon(value)), "error": error,
+            "digest": None if error else digest(canon(value, job["comparator"])), "timeMs": round(ms, 3)}
 
 
 def validate(job):
@@ -175,7 +175,9 @@ def main():
         try:
             with contextlib.redirect_stdout(io.StringIO()):
                 solution = load_module("solution", "solution.py")
-            fn = getattr(solution, job["function"])
+            fn = getattr(solution, job["function"], None)
+            if not callable(fn):
+                raise NameError(f"funcția {job['function']} nu este definită; păstrează numele din semnătură")
         except Exception as exc:  # noqa: BLE001 - syntax errors, missing function
             out = {"status": "compile_error", "error": error_text(exc) if not isinstance(exc, SyntaxError)
                    else f"line {exc.lineno}: SyntaxError: {exc.msg}"}
