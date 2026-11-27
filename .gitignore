@@ -22,3 +22,4 @@ Thumbs.db
 
 # Evaluation outputs (commit selected runs explicitly)
 results/
+__pycache__/
